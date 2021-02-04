@@ -3,16 +3,15 @@
 
 namespace juniorE\ShoppingCart\Tests\Feature;
 
-
-use Orchestra\Testbench\TestCase;
+use juniorE\ShoppingCart\Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
     /**
      * @test
      */
-    public function exampleTest()
+    public function configTest()
     {
-        $this->assertTrue(true);
+        $this->assertEquals("hello world!", config("shoppingcart.test"));
     }
 }
