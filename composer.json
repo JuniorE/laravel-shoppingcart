@@ -1,0 +1,9 @@
+{
+    "name": "juniore/shoppingcart",
+    "description": "Laravel shopping cart",
+    "license": "MIT",
+    "require": {},
+    "require-dev": {
+        "orchestra/testbench": "^6.11"
+    }
+}
