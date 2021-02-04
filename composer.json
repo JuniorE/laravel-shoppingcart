@@ -5,5 +5,15 @@
     "require": {},
     "require-dev": {
         "orchestra/testbench": "^6.11"
+    },
+    "autoload": {
+        "psr-4": {
+            "juniorE\\ShoppingCart\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "juniorE\\ShoppingCart\\Tests\\": "tests"
+        }
     }
 }
