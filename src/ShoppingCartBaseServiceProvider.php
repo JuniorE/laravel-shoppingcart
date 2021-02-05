@@ -10,9 +10,8 @@ class ShoppingCartBaseServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->publishes([
-            __DIR__.'/../config/shoppingcart.php' => config_path('shoppingcart'),
-        ]);
+        $this->publishResources();
+        $this->registerResources();
     }
 
     public function register()
@@ -20,5 +19,17 @@ class ShoppingCartBaseServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/../config/shoppingcart.php', 'shoppingcart'
         );
+    }
+
+    private function registerResources()
+    {
+        $this->loadMigrationsFrom(__DIR__."/../database/migrations");
+    }
+
+    private function publishResources()
+    {
+        $this->publishes([
+            __DIR__.'/../config/shoppingcart.php' => config_path('shoppingcart'),
+        ]);
     }
 }
