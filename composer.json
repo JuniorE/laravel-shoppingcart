@@ -9,7 +9,10 @@
     "autoload": {
         "psr-4": {
             "juniorE\\ShoppingCart\\": "src/"
-        }
+        },
+        "files": [
+            "src/Http/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

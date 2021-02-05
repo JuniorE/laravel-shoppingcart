@@ -2,7 +2,7 @@
 
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use juniorE\ShoppingCart\Helpers\CouponTypes;
+use juniorE\ShoppingCart\Enums\CouponTypes;
 use juniorE\ShoppingCart\Models\Cart;
 use juniorE\ShoppingCart\Models\CartCoupon;
 use juniorE\ShoppingCart\Models\CartItem;
