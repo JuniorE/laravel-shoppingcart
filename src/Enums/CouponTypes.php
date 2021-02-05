@@ -1,7 +1,7 @@
 <?php
 
 
-namespace juniorE\ShoppingCart\Helpers;
+namespace juniorE\ShoppingCart\Enums;
 
 
 class CouponTypes

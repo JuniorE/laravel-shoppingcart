@@ -5,7 +5,7 @@ namespace juniorE\ShoppingCart\Tests\Feature;
 
 use juniorE\ShoppingCart\Tests\TestCase;
 
-class ExampleTest extends TestCase
+class ConfigTest extends TestCase
 {
     /**
      * @test
