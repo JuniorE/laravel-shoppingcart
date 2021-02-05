@@ -70,4 +70,14 @@ class CartTest extends TestCase
         $this->assertEquals($product->id, $dbProduct->id);
         $this->assertEquals($product->cart_id, $dbProduct->cart_id);
     }
+
+    /**
+     * @test
+     */
+    public function can_set_checkout_method()
+    {
+        $this->assertEquals(null, cart()->getCart()->checkout_method);
+        cart()->setCheckoutMethod("invoice");
+        $this->assertEquals("invoice", cart()->getCart()->checkout_method);
+    }
 }

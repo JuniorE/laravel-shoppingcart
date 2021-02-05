@@ -42,8 +42,13 @@ class Cart extends BaseCart
         // TODO: Implement addCoupon() method.
     }
 
-    public function checkoutMethod(string $checkoutMethod): void
+    public function setCheckoutMethod(string $checkoutMethod): void
     {
-        // TODO: Implement checkoutMethod() method.
+        app(CartDatabase::class)->setCheckoutMethod($checkoutMethod);
+    }
+
+    public function getCart(): Models\Cart
+    {
+        return app(CartDatabase::class)->getCart($this->identifier);
     }
 }

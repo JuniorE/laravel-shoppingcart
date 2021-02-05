@@ -42,4 +42,11 @@ class EloquentCartDatabase implements CartDatabase
     {
         $item->delete();
     }
+
+    public function setCheckoutMethod(string $method): void
+    {
+        cart()->getCart()->update([
+            "checkout_method" => $method
+        ]);
+    }
 }

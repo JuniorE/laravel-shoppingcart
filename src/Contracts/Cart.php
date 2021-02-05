@@ -41,7 +41,7 @@ interface Cart
      * @param string $checkoutMethod
      * @return mixed
      */
-    public function checkoutMethod(string $checkoutMethod): void;
+    public function setCheckoutMethod(string $checkoutMethod): void;
 
     /**
      * Get Items from cart
@@ -49,4 +49,12 @@ interface Cart
      * @return Collection|CartItem[]
      */
     public function items(): Collection;
+
+
+    /**
+     * Get the cart
+     *
+     * @return \juniorE\ShoppingCart\Models\Cart
+     */
+    public function getCart(): \juniorE\ShoppingCart\Models\Cart;
 }

@@ -20,4 +20,6 @@ interface CartDatabase
     public function getCartItems(int $cartIdentifier): Collection;
 
     public function removeCartItem(CartItem $item): void;
+
+    public function setCheckoutMethod(string $method): void;
 }
