@@ -92,6 +92,9 @@ class CartTest extends TestCase
         $this->assertEquals(15, cart()->getCart()->conversion_time);
     }
 
+    /**
+     * @test
+     */
     public function can_destroy_cart()
     {
         cart()->addProduct([

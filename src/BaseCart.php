@@ -104,6 +104,8 @@ abstract class BaseCart implements Contracts\Cart
         $this->cartItems = collect();
         $this->coupons = collect();
 
+        session()->put(self::SESSION_CART_IDENTIFIER, $this->identifier);
+
         return $this->identifier;
     }
 
