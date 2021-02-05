@@ -4,6 +4,7 @@
 namespace juniorE\ShoppingCart;
 
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Models\CartCoupon;
@@ -44,7 +45,9 @@ class Cart extends BaseCart
 
     public function setCheckoutMethod(string $checkoutMethod): void
     {
-        app(CartDatabase::class)->setCheckoutMethod($checkoutMethod);
+        $database = app(CartDatabase::class);
+        $database->setCheckoutMethod($checkoutMethod);
+        $database->setConversionTime(now()->diffInMinutes($this->getCart()->created_at));
     }
 
     public function getCart(): Models\Cart

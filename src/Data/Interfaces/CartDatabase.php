@@ -22,4 +22,6 @@ interface CartDatabase
     public function removeCartItem(CartItem $item): void;
 
     public function setCheckoutMethod(string $method): void;
+
+    public function setConversionTime(int $minutes): void;
 }

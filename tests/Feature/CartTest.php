@@ -80,4 +80,15 @@ class CartTest extends TestCase
         cart()->setCheckoutMethod("invoice");
         $this->assertEquals("invoice", cart()->getCart()->checkout_method);
     }
+
+    /**
+     * @test
+     */
+    public function can_set_conversion_time()
+    {
+        cart()->getCart()->update(["created_at" => now()->addMinutes(-15)]);
+        $this->assertEquals(null, cart()->getCart()->conversion_time);
+        cart()->setCheckoutMethod("invoice");
+        $this->assertEquals(15, cart()->getCart()->conversion_time);
+    }
 }

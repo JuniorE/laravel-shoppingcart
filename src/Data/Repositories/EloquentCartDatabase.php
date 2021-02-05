@@ -49,4 +49,11 @@ class EloquentCartDatabase implements CartDatabase
             "checkout_method" => $method
         ]);
     }
+
+    public function setConversionTime(int $minutes): void
+    {
+        cart()->getCart()->update([
+            "conversion_time" => $minutes
+        ]);
+    }
 }
