@@ -38,4 +38,18 @@ class CartTest extends TestCase
         $this->assertCount(1, cart()->items());
         $this->assertCount(1, CartItem::where('cart_id', cart()->id)->get());
     }
+
+    /**
+     * @test
+     */
+    public function can_remove_product_from_cart()
+    {
+        $this->assertCount(0, cart()->items());
+        $product = cart()->addProduct([
+            "plu" => 5
+        ]);
+        $this->assertCount(1, cart()->items());
+        cart()->removeItem($product);
+        $this->assertCount(0, cart()->items());
+    }
 }

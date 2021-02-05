@@ -25,7 +25,11 @@ class Cart extends BaseCart
 
     public function removeItem(CartItem $item): void
     {
-        // TODO: Implement removeItem() method.
+        $this->cartItems->filter(function($cartItem) use ($item) {
+            return $cartItem->id !== $item->id;
+        });
+
+        app(CartDatabase::class)->removeCartItem($item);
     }
 
     public function items(): Collection

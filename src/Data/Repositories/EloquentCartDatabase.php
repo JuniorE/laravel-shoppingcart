@@ -31,4 +31,9 @@ class EloquentCartDatabase implements CartDatabase
     {
         // TODO: Implement getCartItem() method.
     }
+
+    public function removeCartItem(CartItem $item): void
+    {
+        $item->delete();
+    }
 }
