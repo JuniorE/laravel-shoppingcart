@@ -8,13 +8,18 @@ use Illuminate\Support\Collection;
 use juniorE\ShoppingCart\Models\CartCoupon;
 use juniorE\ShoppingCart\Models\CartItem;
 
-class Cart implements Contracts\Cart
+class Cart extends BaseCart
 {
-
     public function addProduct(array $product): CartItem
     {
-        // TODO: Implement addProduct() method.
-        return new CartItem();
+        $cartItem = CartItem::create(
+            collect($product)
+                ->merge(["cart_id" => $this->identifier])
+                ->toArray()
+        );
+
+        $this->cartItems->push($cartItem);
+        return $cartItem;
     }
 
     public function removeItem(CartItem $item): void
@@ -24,8 +29,7 @@ class Cart implements Contracts\Cart
 
     public function items(): Collection
     {
-        // TODO: Implement items() method.
-        return collect();
+        return $this->cartItems;
     }
 
     public function addCoupon(CartCoupon $coupon): void

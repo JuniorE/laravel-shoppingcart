@@ -16,6 +16,7 @@ class ShoppingCartBaseServiceProvider extends ServiceProvider
 
     public function register()
     {
+        app()->singleton(BaseCart::class, Cart::class);
         $this->mergeConfigFrom(
             __DIR__.'/../config/shoppingcart.php', 'shoppingcart'
         );

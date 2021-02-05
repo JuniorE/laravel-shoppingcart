@@ -2,6 +2,7 @@
 
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use juniorE\ShoppingCart\BaseCart;
 use juniorE\ShoppingCart\Enums\CouponTypes;
 use juniorE\ShoppingCart\Models\Cart;
 use juniorE\ShoppingCart\Models\CartCoupon;
@@ -21,7 +22,7 @@ class DatabaseTest extends TestCase
         $this->assertCount(0, Cart::all());
 
         Cart::create([
-            "identifier" => Hash::make(\Carbon\Carbon::now()->toISOString()),
+            "identifier" => BaseCart::generateIdentifier(),
         ]);
 
         $this->assertCount(1, Cart::all());
@@ -52,7 +53,7 @@ class DatabaseTest extends TestCase
 
 
         $cart = Cart::create([
-            "identifier" => Hash::make(\Carbon\Carbon::now()->toISOString()),
+            "identifier" => BaseCart::generateIdentifier(),
         ]);
 
         CartItem::create([

@@ -30,7 +30,7 @@ class CreateCartItemsTable extends Migration {
 
             $table->json('additional')->nullable();
 
-            $table->foreign('cart_id')->references('id')->on('cart')->onDelete('cascade');
+            $table->foreign('cart_id')->references('identifier')->on('cart')->onDelete('cascade');
             $table->foreign('parent_id')->references('id')->on('cart_items')->onDelete('cascade');
 
             $table->timestamps();

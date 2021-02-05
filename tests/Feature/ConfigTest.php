@@ -10,7 +10,7 @@ class ConfigTest extends TestCase
     /**
      * @test
      */
-    public function configTest()
+    public function config_test()
     {
         $this->assertEquals("hello world!", config("shoppingcart.test"));
     }
