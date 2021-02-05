@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Log;
  * @property double|null $discount
  * @property string|null $checkout_method
  * @property int|null $conversion_time
- * @property Object|null $additional
+ * @property array|null $additional
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
