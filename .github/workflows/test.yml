@@ -11,8 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install composer dependencies
-        run: composer install
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
-      - name: Execute tests
-        run: phpunit
+      - name: Install dependencies
+        uses: php-actions/composer@v5
+      
+      - name: Run tests
+        uses: nathanheffley/laravel-phpunit-action@v0.1.0
