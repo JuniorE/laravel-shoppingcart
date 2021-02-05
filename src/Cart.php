@@ -32,4 +32,9 @@ class Cart implements Contracts\Cart
     {
         // TODO: Implement addCoupon() method.
     }
+
+    public function checkoutMethod(string $checkoutMethod): void
+    {
+        // TODO: Implement checkoutMethod() method.
+    }
 }

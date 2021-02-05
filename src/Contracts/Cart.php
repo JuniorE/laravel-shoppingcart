@@ -33,6 +33,16 @@ interface Cart
      */
     public function addCoupon(CartCoupon $coupon): void;
 
+
+    /**
+     * Set the checkoutMethod, this also marks the cart as 'closed' and
+     * calculates the conversion time.
+     *
+     * @param string $checkoutMethod
+     * @return mixed
+     */
+    public function checkoutMethod(string $checkoutMethod): void;
+
     /**
      * Get Items from cart
      * 
