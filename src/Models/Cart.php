@@ -37,6 +37,13 @@ class Cart extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        "additional" => "array",
+        "updated_at" => "datetime",
+        "created_at" => "datetime",
+
+    ];
+
     public function items()
     {
         return $this->hasMany(CartItem::class);
