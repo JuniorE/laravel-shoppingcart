@@ -6,6 +6,7 @@ namespace juniorE\ShoppingCart;
 
 use Illuminate\Support\Collection;
 use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
+use juniorE\ShoppingCart\Data\Interfaces\VisitsHistoryDatabase;
 use juniorE\ShoppingCart\Models\CartCoupon;
 use juniorE\ShoppingCart\Models\CartItem;
 
@@ -52,5 +53,15 @@ class Cart extends BaseCart
     public function getCart(): Models\Cart
     {
         return app(CartDatabase::class)->getCart($this->identifier);
+    }
+
+    public function history()
+    {
+        return $this->getCart()->history->first();
+    }
+
+    public function markVisited(string $plu): void
+    {
+        app(VisitsHistoryDatabase::class)->markVisited($plu);
     }
 }

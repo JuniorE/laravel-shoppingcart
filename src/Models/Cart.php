@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -29,6 +30,9 @@ use Illuminate\Support\Facades\Log;
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
+ * @property HasMany|VisitsHistory[]|VisitsHistory|null $history;
+ * @property HasMany|CartItem[]|CartItem|null $items;
+ *
  * @method static Builder|static where(string $column, string $operator, mixed $value, $boolean="and")
  * @method static Builder|static query()
  * @method static Model|Collection|static[]|static|null find(mixed $id, array $columns=[])
@@ -43,6 +47,11 @@ class Cart extends Model
         "created_at" => "datetime",
 
     ];
+
+    public function history()
+    {
+        return $this->hasMany(VisitsHistory::class);
+    }
 
     public function items()
     {

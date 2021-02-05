@@ -62,4 +62,6 @@ interface Cart
      * Destroy the shopping cart
      */
     public function destroy(): void;
+
+    public function markVisited(string $plu): void;
 }
