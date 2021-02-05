@@ -3,6 +3,7 @@
 
 namespace juniorE\ShoppingCart\Data\Interfaces;
 
+use Illuminate\Support\Collection;
 use \juniorE\ShoppingCart\Models\Cart;
 use juniorE\ShoppingCart\Models\CartItem;
 
@@ -15,6 +16,8 @@ interface CartDatabase
     public function createCartItem(array $product): CartItem;
 
     public function getCartItem(int $id): CartItem;
+
+    public function getCartItems(int $cartIdentifier): Collection;
 
     public function removeCartItem(CartItem $item): void;
 }

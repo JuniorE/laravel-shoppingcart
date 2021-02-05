@@ -4,6 +4,7 @@
 namespace juniorE\ShoppingCart\Data\Repositories;
 
 
+use Illuminate\Support\Collection;
 use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Models\Cart;
 use juniorE\ShoppingCart\Models\CartItem;
@@ -29,7 +30,12 @@ class EloquentCartDatabase implements CartDatabase
 
     public function getCartItem(int $id): CartItem
     {
-        // TODO: Implement getCartItem() method.
+        return CartItem::find($id);
+    }
+
+    public function getCartItems(int $cartIdentifier): Collection
+    {
+        return CartItem::where('cart_id', cart()->id)->get();
     }
 
     public function removeCartItem(CartItem $item): void

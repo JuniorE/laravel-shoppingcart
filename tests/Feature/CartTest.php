@@ -3,7 +3,7 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use juniorE\ShoppingCart\Cart;
-use juniorE\ShoppingCart\Models\CartItem;
+use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Tests\TestCase;
 
 class CartTest extends TestCase
@@ -36,7 +36,8 @@ class CartTest extends TestCase
             "plu" => 5
         ]);
         $this->assertCount(1, cart()->items());
-        $this->assertCount(1, CartItem::where('cart_id', cart()->id)->get());
+        $this->assertCount(1, app(CartDatabase::class)
+            ->getCartItems(cart()->id));
     }
 
     /**
@@ -51,5 +52,22 @@ class CartTest extends TestCase
         $this->assertCount(1, cart()->items());
         cart()->removeItem($product);
         $this->assertCount(0, cart()->items());
+    }
+
+    /**
+     * @test
+     */
+    public function can_get_product()
+    {
+        $product = cart()->addProduct([
+            "plu" => 5
+        ]);
+
+        $dbProduct = app(CartDatabase::class)
+            ->getCartItem($product->id);
+
+        $this->assertEquals($product->plu, $dbProduct->plu);
+        $this->assertEquals($product->id, $dbProduct->id);
+        $this->assertEquals($product->cart_id, $dbProduct->cart_id);
     }
 }
