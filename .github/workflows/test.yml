@@ -11,14 +11,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Cache Composer dependencies
-        uses: actions/cache@v2
-        with:
-          path: /tmp/composer-cache
-          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+#       - name: Cache Composer dependencies
+#         uses: actions/cache@v2
+#         with:
+#           path: /tmp/composer-cache
+#           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
       - name: Install dependencies
-        uses: php-actions/composer@v5
+        run: |
+          ls -Al
+          composer install
       
       - name: Run tests
         uses: nathanheffley/laravel-phpunit-action@v0.1.0
