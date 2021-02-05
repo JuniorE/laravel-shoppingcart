@@ -15,6 +15,11 @@ abstract class BaseCart implements Contracts\Cart
     protected const SESSION_CART_IDENTIFIER="cart_identifier";
 
     /**
+     * @var CartItemsRepository
+     */
+    public $cartTtemsRepository;
+
+    /**
      * @var string
      */
     public $identifier;
@@ -44,6 +49,8 @@ abstract class BaseCart implements Contracts\Cart
         if (!$identifier) {
             $this->restoreOrCreateIdentifier();
         }
+
+        $this->cartTtemsRepository = new CartItemsRepository();
 
         session()->put(self::SESSION_CART_IDENTIFIER, $this->identifier);
     }
