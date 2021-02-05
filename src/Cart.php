@@ -14,7 +14,7 @@ class Cart extends BaseCart
     {
         $cartItem = CartItem::create(
             collect($product)
-                ->merge(["cart_id" => $this->identifier])
+                ->merge(["cart_id" => $this->id])
                 ->toArray()
         );
 

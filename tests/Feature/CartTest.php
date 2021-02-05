@@ -36,6 +36,6 @@ class CartTest extends TestCase
             "plu" => 5
         ]);
         $this->assertCount(1, cart()->items());
-        $this->assertCount(1, CartItem::where('cart_id', cart()->identifier)->get());
+        $this->assertCount(1, CartItem::where('cart_id', cart()->id)->get());
     }
 }

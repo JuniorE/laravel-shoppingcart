@@ -20,6 +20,11 @@ abstract class BaseCart implements Contracts\Cart
     public $identifier;
 
     /**
+     * @var int
+     */
+    public $id;
+
+    /**
      * @var Collection|CartItem[]
      */
     protected $cartItems;
@@ -71,6 +76,7 @@ abstract class BaseCart implements Contracts\Cart
             return $this->create();
         }
 
+        $this->id = $cart->id;
         $this->cartItems = $cart->items;
         $this->coupons = $cart->coupons;
 
@@ -86,10 +92,11 @@ abstract class BaseCart implements Contracts\Cart
     {
         $this->identifier = self::generateIdentifier();
 
-        Cart::create([
+        $cart = Cart::create([
             "identifier" => $this->identifier
         ]);
 
+        $this->id = $cart->id;
         $this->cartItems = collect();
         $this->coupons = collect();
 

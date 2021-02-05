@@ -12,7 +12,7 @@ class Cart extends Model
 
     public function items()
     {
-        return $this->hasMany(CartItem::class, 'cart_id', 'identifier');
+        return $this->hasMany(CartItem::class);
     }
 
     public function getCouponsAttribute()
