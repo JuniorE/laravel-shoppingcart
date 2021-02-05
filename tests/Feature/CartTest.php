@@ -5,6 +5,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use juniorE\ShoppingCart\Cart;
 use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Tests\TestCase;
+use juniorE\ShoppingCart\Models as Models;
 
 class CartTest extends TestCase
 {
@@ -111,5 +112,43 @@ class CartTest extends TestCase
         $this->assertCount(0, cart()->items());
         $this->assertNotSame($id, cart()->id);
         $this->assertNotSame($identifier, cart()->identifier);
+    }
+
+    /**
+     * @test
+     */
+    public function can_cleanup_idle_carts()
+    {
+        DB::table("carts")->insert([
+            ["identifier" => 1, "updated_at" => now()->subDays(1)],
+            ["identifier" => 2, "updated_at" => now()->subDays(10)],
+            ["identifier" => 3, "updated_at" => now()->subDays(11)],
+            ["identifier" => 4, "updated_at" => now()->subDays(13)],
+            ["identifier" => 5, "updated_at" => now()->subDays(14)],
+            ["identifier" => 6, "updated_at" => now()->subDays(17)],
+            ["identifier" => 7, "updated_at" => now()->subDays(24)],
+            ["identifier" => 8, "updated_at" => now()->subDays(30)],
+            ["identifier" => 9, "updated_at" => now()->subDays(31)],
+            ["identifier" => 10, "updated_at" => now()->subDays(32)],
+            ["identifier" => 11, "updated_at" => now()->subDays(34)],
+            ["identifier" => 12, "updated_at" => now()->subDays(42)],
+            ["identifier" => 13, "updated_at" => now()->subDays(42)],
+            ["identifier" => 14, "updated_at" => now()->subDays(42)],
+            ["identifier" => 15, "updated_at" => now()->subDays(42)],
+        ]);
+
+        $this->assertCount(15, Models\Cart::all());
+
+        $this->assertFalse(Models\Cart::all()->every(function(Models\Cart $cart) {
+            return now()->diffInDays($cart->updated_at) < 30;
+        }));
+
+        Models\Cart::clean();
+
+        $this->assertCount(7, Models\Cart::all());
+
+        $this->assertTrue(Models\Cart::all()->every(function(Models\Cart $cart) {
+            return now()->diffInDays($cart->updated_at) < 30;
+        }));
     }
 }
