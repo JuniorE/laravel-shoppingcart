@@ -48,6 +48,12 @@ abstract class BaseCart implements Contracts\Cart
         session()->put(self::SESSION_CART_IDENTIFIER, $this->identifier);
     }
 
+    public function destroy(): void
+    {
+        app(CartDatabase::class)->clear();
+        $this->create();
+    }
+
     /**
      * Restore or Create the cart using the Session Identifier
      * @return string

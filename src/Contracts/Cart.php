@@ -57,4 +57,9 @@ interface Cart
      * @return \juniorE\ShoppingCart\Models\Cart
      */
     public function getCart(): \juniorE\ShoppingCart\Models\Cart;
+
+    /**
+     * Destroy the shopping cart
+     */
+    public function destroy(): void;
 }

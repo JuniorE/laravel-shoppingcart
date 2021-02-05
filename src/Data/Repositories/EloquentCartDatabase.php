@@ -56,4 +56,13 @@ class EloquentCartDatabase implements CartDatabase
             "conversion_time" => $minutes
         ]);
     }
+
+    public function clear(bool $hard=false): void
+    {
+        if ($hard) {
+            cart()->getCart()->forceDelete();
+        } else {
+            cart()->getCart()->delete();
+        }
+    }
 }

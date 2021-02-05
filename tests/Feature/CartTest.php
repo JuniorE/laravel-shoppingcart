@@ -91,4 +91,22 @@ class CartTest extends TestCase
         cart()->setCheckoutMethod("invoice");
         $this->assertEquals(15, cart()->getCart()->conversion_time);
     }
+
+    public function can_destroy_cart()
+    {
+        cart()->addProduct([
+            "plu" => 5
+        ]);
+
+        $this->assertCount(1, cart()->items());
+
+        $id = cart()->id;
+        $identifier = cart()->identifier;
+
+        cart()->destroy();
+
+        $this->assertCount(0, cart()->items());
+        $this->assertNotSame($id, cart()->id);
+        $this->assertNotSame($identifier, cart()->identifier);
+    }
 }

@@ -4,7 +4,6 @@
 namespace juniorE\ShoppingCart;
 
 
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Models\CartCoupon;
