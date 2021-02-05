@@ -6,7 +6,7 @@ namespace juniorE\ShoppingCart;
 
 use Hash;
 use Illuminate\Support\Collection;
-use \juniorE\ShoppingCart\Models\Cart;
+use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Models\CartCoupon;
 use juniorE\ShoppingCart\Models\CartItem;
 
@@ -71,7 +71,7 @@ abstract class BaseCart implements Contracts\Cart
     {
         $this->identifier = $identifier;
 
-        $cart = Cart::where('identifier', $identifier)->first();
+        $cart = app(CartDatabase::class)->getCart($this->identifier);
         if (!$cart) {
             return $this->create();
         }
@@ -92,9 +92,7 @@ abstract class BaseCart implements Contracts\Cart
     {
         $this->identifier = self::generateIdentifier();
 
-        $cart = Cart::create([
-            "identifier" => $this->identifier
-        ]);
+        $cart = app(CartDatabase::class)->createCart($this->identifier);
 
         $this->id = $cart->id;
         $this->cartItems = collect();

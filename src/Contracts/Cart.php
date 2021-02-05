@@ -12,7 +12,7 @@ interface Cart
 {
     /**
      * Add a product to the cart
-     * 
+     *
      * @param array $product
      * @return CartItem
      */

@@ -5,6 +5,7 @@ namespace juniorE\ShoppingCart;
 
 
 use Illuminate\Support\Collection;
+use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Models\CartCoupon;
 use juniorE\ShoppingCart\Models\CartItem;
 
@@ -12,7 +13,7 @@ class Cart extends BaseCart
 {
     public function addProduct(array $product): CartItem
     {
-        $cartItem = CartItem::create(
+        $cartItem = app(CartDatabase::class)->createCartItem(
             collect($product)
                 ->merge(["cart_id" => $this->id])
                 ->toArray()

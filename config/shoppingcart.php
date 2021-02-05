@@ -1,5 +1,7 @@
 <?php
 
 return [
-    "test" => "hello world!"
+    "database" => [
+        "implementation" => \juniorE\ShoppingCart\Data\Repositories\EloquentCartDatabase::class
+    ]
 ];

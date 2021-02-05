@@ -5,6 +5,8 @@ namespace juniorE\ShoppingCart;
 
 
 use Carbon\Laravel\ServiceProvider;
+use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
+use juniorE\ShoppingCart\Data\Repositories\EloquentCartDatabase;
 
 class ShoppingCartBaseServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,8 @@ class ShoppingCartBaseServiceProvider extends ServiceProvider
     public function register()
     {
         app()->singleton(BaseCart::class, Cart::class);
+        app()->bind(CartDatabase::class, EloquentCartDatabase::class);
+
         $this->mergeConfigFrom(
             __DIR__.'/../config/shoppingcart.php', 'shoppingcart'
         );
