@@ -82,4 +82,21 @@ class CartItemTest extends TestCase
         $product = CartItem::firstWhere('id', $product->id);
         $this->assertEquals(15, $product->price);
     }
+    
+    /**
+     * @test
+     */
+    public function can_update_weight(){
+        $product = cart()->addProduct([
+            "plu" => 5,
+            "weight" => 10
+        ]);
+
+        $this->assertEquals(10, $product->weight);
+
+        cart()->itemsRepository->setWeight($product, 15);
+
+        $product = CartItem::firstWhere('id', $product->id);
+        $this->assertEquals(15, $product->weight);
+    }
 }

@@ -35,7 +35,9 @@ class EloquentCartItemDatabase implements CartItemDatabase
 
     public function setWeight(CartItem $item, float $weight): void
     {
-        // TODO: Implement setWeight() method.
+        $item->update([
+            "weight" => $weight
+        ]);
     }
 
     public function setPLU(CartItem $item, string $plu): void

@@ -11,7 +11,7 @@ class CartItemsRepository implements Contracts\CartItemsRepository
 {
     public function setParentCartItem(CartItem $item, int $parentId): void
     {
-        app(CartItemDatabase::class)->setParentCartItem($item, $parentId);
+        $this->getDatabase()->setParentCartItem($item, $parentId);
     }
 
     public function setTaxPercent(CartItem $item, float $percent): void
@@ -26,12 +26,12 @@ class CartItemsRepository implements Contracts\CartItemsRepository
 
     public function setPrice(CartItem $item, float $price): void
     {
-        app(CartItemDatabase::class)->setPrice($item, $price);
+        $this->getDatabase()->setPrice($item, $price);
     }
 
     public function setWeight(CartItem $item, float $weight): void
     {
-        // TODO: Implement setWeight() method.
+        $this->getDatabase()->setWeight($item, $weight);
     }
 
     public function setPLU(CartItem $item, string $plu): void
@@ -41,6 +41,11 @@ class CartItemsRepository implements Contracts\CartItemsRepository
 
     public function setAdditionalData(CartItem $item, array $data): void
     {
-        app(CartItemDatabase::class)->setAdditionalData($item, $data);
+        $this->getDatabase()->setAdditionalData($item, $data);
+    }
+
+    private function getDatabase()
+    {
+        return app(CartItemDatabase::class);
     }
 }
