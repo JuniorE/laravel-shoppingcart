@@ -65,4 +65,21 @@ class CartItemTest extends TestCase
         $product = CartItem::firstWhere('id', $product->id);
         $this->assertEquals("person", $product->additional["unit"]);
     }
+
+    /**
+     * @test
+     */
+    public function can_set_price(){
+        $product = cart()->addProduct([
+            "plu" => 5,
+            "price" => 10
+        ]);
+
+        $this->assertEquals(10, $product->price);
+
+        cart()->itemsRepository->setPrice($product, 15);
+
+        $product = CartItem::firstWhere('id', $product->id);
+        $this->assertEquals(15, $product->price);
+    }
 }

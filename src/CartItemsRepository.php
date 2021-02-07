@@ -26,7 +26,7 @@ class CartItemsRepository implements Contracts\CartItemsRepository
 
     public function setPrice(CartItem $item, float $price): void
     {
-        // TODO: Implement setPrice() method.
+        app(CartItemDatabase::class)->setPrice($item, $price);
     }
 
     public function setWeight(CartItem $item, float $weight): void
