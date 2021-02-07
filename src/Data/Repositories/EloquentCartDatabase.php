@@ -20,12 +20,18 @@ class EloquentCartDatabase implements CartDatabase
 
     public function getCart(string $identifier): Cart
     {
-        return Cart::where('identifier', $identifier)->first();
+        return Cart::where('identifier', "=", $identifier)->first();
     }
 
     public function createCartItem(array $product): CartItem
     {
-        return CartItem::create($product);
+        return CartItem::create(
+            collect($product)
+                ->merge([
+                    "tax_amount" => ($product["price"] ?? 0) * ($product["tax_percent"] ?? 0)
+                ])
+                ->toArray()
+        );
     }
 
     public function getCartItem(int $id): CartItem

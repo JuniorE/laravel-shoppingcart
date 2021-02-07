@@ -19,7 +19,8 @@ class EloquentCartItemDatabase implements CartItemDatabase
     public function setTaxPercent(CartItem $item, float $percent): void
     {
         $item->update([
-            "tax_percent" => $percent
+            "tax_percent" => $percent,
+            "tax_amount" => $item->price * $percent
         ]);
     }
 
@@ -31,7 +32,8 @@ class EloquentCartItemDatabase implements CartItemDatabase
     public function setPrice(CartItem $item, float $price): void
     {
         $item->update([
-            "price" => $price
+            "price" => $price,
+            "tax_amount" => $price * $item->tax_percent
         ]);
     }
 

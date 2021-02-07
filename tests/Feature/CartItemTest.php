@@ -62,7 +62,6 @@ class CartItemTest extends TestCase
 
         ]);
 
-        $product = CartItem::firstWhere('id', $product->id);
         $this->assertEquals("person", $product->additional["unit"]);
     }
 
@@ -79,7 +78,6 @@ class CartItemTest extends TestCase
 
         cart()->itemsRepository->setPrice($product, 15);
 
-        $product = CartItem::firstWhere('id', $product->id);
         $this->assertEquals(15, $product->price);
     }
     
@@ -96,7 +94,6 @@ class CartItemTest extends TestCase
 
         cart()->itemsRepository->setWeight($product, 15);
 
-        $product = CartItem::firstWhere('id', $product->id);
         $this->assertEquals(15, $product->weight);
     }
 
@@ -113,7 +110,37 @@ class CartItemTest extends TestCase
 
         cart()->itemsRepository->setTaxPercent($product, 0.06);
 
-        $product = CartItem::firstWhere('id', $product->id);
         $this->assertEquals(0.06, $product->tax_percent);
+    }
+
+    /**
+     * @test
+     */
+    public function does_tax_amount_get_updated_automatically(){
+        $product = cart()->addProduct([
+            "plu" => 5,
+            "tax_percent" => 0.21
+        ]);
+
+        $product2 = cart()->addProduct([
+            "plu" => 5,
+            "tax_percent" => 0.21,
+            "price" => 10
+        ]);
+
+        $this->assertEquals(0, $product->tax_amount);
+        $this->assertEquals(2.10, $product2->tax_amount);
+
+        cart()->itemsRepository->setTaxPercent($product, 0.06);
+        cart()->itemsRepository->setTaxPercent($product2, 0.06);
+
+        $this->assertEquals(0, $product->tax_amount);
+        $this->assertEquals(0.6, $product2->tax_amount);
+
+        cart()->itemsRepository->setPrice($product, 5);
+        cart()->itemsRepository->setPrice($product2, 100);
+
+        $this->assertEquals(0.3, $product->tax_amount);
+        $this->assertEquals(6, $product2->tax_amount);
     }
 }
