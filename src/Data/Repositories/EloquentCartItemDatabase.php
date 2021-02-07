@@ -16,33 +16,36 @@ class EloquentCartItemDatabase implements CartItemDatabase
         ]);
     }
 
-    public function setTaxPercent(float $percent): void
+    public function setTaxPercent(CartItem $item, float $percent): void
     {
         // TODO: Implement setTaxPercent() method.
     }
 
-    public function setCouponCode(string $code): void
+    public function setCouponCode(CartItem $item, string $code): void
     {
         // TODO: Implement setCouponCode() method.
     }
 
-    public function setPrice(float $price): void
+    public function setPrice(CartItem $item, float $price): void
     {
         // TODO: Implement setPrice() method.
     }
 
-    public function setWeight(float $weight): void
+    public function setWeight(CartItem $item, float $weight): void
     {
         // TODO: Implement setWeight() method.
     }
 
-    public function setPLU(string $plu): void
+    public function setPLU(CartItem $item, string $plu): void
     {
         // TODO: Implement setPLU() method.
     }
 
-    public function setAdditionalData(array $data): void
+    public function setAdditionalData(CartItem $item, array $data): void
     {
-        // TODO: Implement setAdditionalData() method.
+        $item->update([
+            'additional' => collect($item->additional)
+                ->merge($data)
+        ]);
     }
 }

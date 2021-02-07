@@ -2,6 +2,7 @@
 
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use juniorE\ShoppingCart\Models\CartItem;
 use juniorE\ShoppingCart\Tests\TestCase;
 
 class CartItemTest extends TestCase
@@ -33,5 +34,35 @@ class CartItemTest extends TestCase
         $this->assertCount(2, $parent->subproducts);
         $this->assertEquals($sub1->id, $parent->subproducts->first()->id);
         $this->assertEquals($sub2->id, $parent->subproducts->last()->id);
+    }
+
+    /**
+     * @test
+     */
+    public function can_set_additional_data(){
+        $product = cart()->addProduct([
+            "plu" => 5
+        ]);
+
+        cart()->itemsRepository->setAdditionalData($product, [
+            "unit" => "kilogram",
+
+        ]);
+
+        cart()->itemsRepository->setAdditionalData($product, [
+            "key" => "value"
+        ]);
+
+        $product = CartItem::firstWhere('id', $product->id);
+        $this->assertEquals("kilogram", $product->additional["unit"]);
+        $this->assertEquals("value", $product->additional["key"]);
+
+        cart()->itemsRepository->setAdditionalData($product, [
+            "unit" => "person",
+
+        ]);
+
+        $product = CartItem::firstWhere('id', $product->id);
+        $this->assertEquals("person", $product->additional["unit"]);
     }
 }
