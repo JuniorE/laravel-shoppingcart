@@ -99,4 +99,21 @@ class CartItemTest extends TestCase
         $product = CartItem::firstWhere('id', $product->id);
         $this->assertEquals(15, $product->weight);
     }
+
+    /**
+     * @test
+     */
+    public function can_update_tax_percent(){
+        $product = cart()->addProduct([
+            "plu" => 5,
+            "tax_percent" => 0.21
+        ]);
+
+        $this->assertEquals(0.21, $product->tax_percent);
+
+        cart()->itemsRepository->setTaxPercent($product, 0.06);
+
+        $product = CartItem::firstWhere('id', $product->id);
+        $this->assertEquals(0.06, $product->tax_percent);
+    }
 }

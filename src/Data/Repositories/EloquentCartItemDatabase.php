@@ -18,7 +18,9 @@ class EloquentCartItemDatabase implements CartItemDatabase
 
     public function setTaxPercent(CartItem $item, float $percent): void
     {
-        // TODO: Implement setTaxPercent() method.
+        $item->update([
+            "tax_percent" => $percent
+        ]);
     }
 
     public function setCouponCode(CartItem $item, string $code): void

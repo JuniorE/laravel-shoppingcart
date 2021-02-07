@@ -16,7 +16,7 @@ class CartItemsRepository implements Contracts\CartItemsRepository
 
     public function setTaxPercent(CartItem $item, float $percent): void
     {
-        // TODO: Implement setTaxPercent() method.
+        $this->getDatabase()->setTaxPercent($item, $percent);
     }
 
     public function setCouponCode(CartItem $item, string $code): void
