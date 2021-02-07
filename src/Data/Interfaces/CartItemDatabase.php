@@ -1,12 +1,12 @@
 <?php
 
 
-namespace juniorE\ShoppingCart\Contracts;
+namespace juniorE\ShoppingCart\Data\Interfaces;
 
 
 use juniorE\ShoppingCart\Models\CartItem;
 
-interface CartItemsRepository
+interface CartItemDatabase
 {
     /**
      * @param CartItem $item

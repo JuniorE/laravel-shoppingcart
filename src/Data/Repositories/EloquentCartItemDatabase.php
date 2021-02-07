@@ -1,17 +1,19 @@
 <?php
 
 
-namespace juniorE\ShoppingCart;
+namespace juniorE\ShoppingCart\Data\Repositories;
 
 
 use juniorE\ShoppingCart\Data\Interfaces\CartItemDatabase;
 use juniorE\ShoppingCart\Models\CartItem;
 
-class CartItemsRepository implements Contracts\CartItemsRepository
+class EloquentCartItemDatabase implements CartItemDatabase
 {
     public function setParentCartItem(CartItem $item, int $parentId): void
     {
-        app(CartItemDatabase::class)->setParentCartItem($item, $parentId);
+        $item->update([
+            "parent_id" => $parentId
+        ]);
     }
 
     public function setTaxPercent(float $percent): void

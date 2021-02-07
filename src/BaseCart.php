@@ -17,7 +17,7 @@ abstract class BaseCart implements Contracts\Cart
     /**
      * @var CartItemsRepository
      */
-    public $cartTtemsRepository;
+    public $itemsRepository;
 
     /**
      * @var string
@@ -50,7 +50,7 @@ abstract class BaseCart implements Contracts\Cart
             $this->restoreOrCreateIdentifier();
         }
 
-        $this->cartTtemsRepository = new CartItemsRepository();
+        $this->itemsRepository = new CartItemsRepository();
 
         session()->put(self::SESSION_CART_IDENTIFIER, $this->identifier);
     }
