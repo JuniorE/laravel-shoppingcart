@@ -50,6 +50,11 @@ class Cart extends BaseCart
         $database->setConversionTime(now()->diffInMinutes($this->getCart()->created_at));
     }
 
+    public function setAdditionalData(array $data)
+    {
+        app(CartDatabase::class)->setAdditionalData($data);
+    }
+
     public function getCart(): Models\Cart
     {
         return app(CartDatabase::class)->getCart($this->identifier);

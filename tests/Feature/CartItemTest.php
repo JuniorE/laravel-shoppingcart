@@ -53,7 +53,6 @@ class CartItemTest extends TestCase
             "key" => "value"
         ]);
 
-        $product = CartItem::firstWhere('id', $product->id);
         $this->assertEquals("kilogram", $product->additional["unit"]);
         $this->assertEquals("value", $product->additional["key"]);
 

@@ -25,5 +25,7 @@ interface CartDatabase
 
     public function setConversionTime(int $minutes): void;
 
+    public function setAdditionalData(array $data);
+
     public function clear(bool $hard=false): void;
 }

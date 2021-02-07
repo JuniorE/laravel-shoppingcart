@@ -151,4 +151,35 @@ class CartTest extends TestCase
             return now()->diffInDays($cart->updated_at) < 30;
         }));
     }
+
+    /**
+     * @test
+     */
+    public function can_set_additional_data()
+    {
+        cart()->addProduct([
+            "plu" => 5
+        ]);
+
+        cart()->setAdditionalData([
+            "comment" => "lorem ipsum"
+        ]);
+
+        cart()->setAdditionalData([
+            "key" => "value",
+            "key2" => "value2"
+        ]);
+
+        $cart = cart()->getCart();
+
+        $this->assertEquals("lorem ipsum", $cart->additional["comment"]);
+        $this->assertEquals("value", $cart->additional["key"]);
+        $this->assertEquals("value2", $cart->additional["key2"]);
+
+        cart()->setAdditionalData([
+            "comment" => "Peanut Allergy",
+        ]);
+
+        $this->assertEquals("Peanut Allergy", cart()->getCart()->additional["comment"]);
+    }
 }

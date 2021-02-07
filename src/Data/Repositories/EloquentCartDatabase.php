@@ -71,4 +71,13 @@ class EloquentCartDatabase implements CartDatabase
             cart()->getCart()->delete();
         }
     }
+
+    public function setAdditionalData(array $data)
+    {
+        $cart = cart()->getCart();
+        $cart->update([
+            'additional' => collect($cart->additional)
+                ->merge($data)
+        ]);
+    }
 }
