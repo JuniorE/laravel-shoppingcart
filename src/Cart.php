@@ -57,7 +57,7 @@ class Cart extends BaseCart
 
     public function history()
     {
-        return $this->getCart()->history->first();
+        return $this->getCart()->history;
     }
 
     public function markVisited(string $plu): void

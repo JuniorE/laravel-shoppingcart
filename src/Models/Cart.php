@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -30,7 +31,7 @@ use Illuminate\Support\Facades\Log;
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
- * @property HasMany|VisitsHistory[]|VisitsHistory|null $history;
+ * @property HasOne|VisitsHistory[]|VisitsHistory|null $history;
  * @property HasMany|CartItem[]|CartItem|null $items;
  *
  * @method static Builder|static where(string $column, string $operator, mixed $value, $boolean="and")
@@ -50,7 +51,7 @@ class Cart extends Model
 
     public function history()
     {
-        return $this->hasMany(VisitsHistory::class);
+        return $this->hasOne(VisitsHistory::class);
     }
 
     public function items()
