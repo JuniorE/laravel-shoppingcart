@@ -36,7 +36,7 @@ class CartItemsRepository implements Contracts\CartItemsRepository
 
     public function setPLU(CartItem $item, string $plu): void
     {
-        // TODO: Implement setPLU() method.
+        $this->getDatabase()->setPLU($item, $plu);
     }
 
     public function setAdditionalData(CartItem $item, array $data): void

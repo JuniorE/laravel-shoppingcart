@@ -46,7 +46,13 @@ class EloquentCartItemDatabase implements CartItemDatabase
 
     public function setPLU(CartItem $item, string $plu): void
     {
-        // TODO: Implement setPLU() method.
+        if (!$plu) {
+            return;
+        }
+
+        $item->update([
+            "plu" => $plu
+        ]);
     }
 
     public function setAdditionalData(CartItem $item, array $data): void

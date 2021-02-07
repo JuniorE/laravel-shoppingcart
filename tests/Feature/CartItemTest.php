@@ -143,4 +143,23 @@ class CartItemTest extends TestCase
         $this->assertEquals(0.3, $product->tax_amount);
         $this->assertEquals(6, $product2->tax_amount);
     }
+
+    /**
+     * @test
+     */
+    public function can_update_plu(){
+        $product = cart()->addProduct([
+            "plu" => 5
+        ]);
+
+        $this->assertEquals(5, $product->plu);
+
+        cart()->itemsRepository->setPLU($product, 10);
+
+        $this->assertEquals(10, $product->plu);
+
+        cart()->itemsRepository->setPLU($product, "");
+
+        $this->assertEquals(10, $product->plu);
+    }
 }
