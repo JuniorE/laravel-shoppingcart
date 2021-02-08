@@ -198,4 +198,28 @@ class CartTest extends TestCase
         $this->assertEquals($identifier, cart()->identifier);
         $this->assertEquals($identifier, session("cart_identifier"));
     }
+
+    /**
+     * @test
+     */
+    public function can_add_coupon_to_cart(){
+        $coupon = cart()->couponsRepository->addCoupon([
+            "name" => "WELCOME10",
+            "discount_percent" => 0.10
+        ]);
+
+        $product = cart()->addProduct([
+            "plu" => 5
+        ]);
+
+        $product2 = cart()->addProduct([
+            "plu" => 6
+        ]);
+
+        cart()->itemsRepository->setCouponCode($product, $coupon->name);
+        cart()->itemsRepository->setCouponCode($product2, $coupon->name);
+
+        $this->assertEquals($coupon->name, $product->coupon_code);
+        $this->assertEquals($coupon->name, $product2->coupon_code);
+    }
 }

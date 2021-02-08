@@ -29,6 +29,8 @@ class CreateCartsTable extends Migration {
             $table->integer('conversion_time')->nullable();
             $table->json('additional')->nullable();
 
+            $table->foreign('coupon_code')->references('name')->on('cart_coupons')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
