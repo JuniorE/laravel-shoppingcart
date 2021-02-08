@@ -242,4 +242,19 @@ class CartCouponsTest extends TestCase
         $this->assertTrue($coupon->ends_other_coupons);
     }
 
+    /**
+     * @test
+     */
+    public function can_update_discount_amount(){
+        $coupon = cart()->couponsRepository->addCoupon([
+            "name" => "GOEDE BUREN",
+            "discount_amount" => 100,
+        ]);
+
+        $this->assertEquals(100, $coupon->discount_amount);
+
+        cart()->couponsRepository->setDiscountAmount($coupon, 75);
+
+        $this->assertEquals(75, $coupon->discount_amount);
+    }
 }

@@ -76,9 +76,9 @@ class CartCouponRepository implements Contracts\CartCouponRepository
         app(CartCouponDatabase::class)->setEndsOtherCoupons($coupon, $endsOtherCoupons);
     }
 
-    public function setDiscountAmount(CartCoupon $coupon, int $amount): void
+    public function setDiscountAmount(CartCoupon $coupon, float $amount): void
     {
-        // TODO: Implement setDiscountAmount() method.
+        app(CartCouponDatabase::class)->setDiscountAmount($coupon, $amount);
     }
 
     public function setDiscountPercent(CartCoupon $coupon, float $percent): void

@@ -35,7 +35,7 @@ interface CartCouponRepository
 
     public function setEndsOtherCoupons(CartCoupon $coupon, bool $endsOtherCoupons): void;
 
-    public function setDiscountAmount(CartCoupon $coupon, int $amount): void;
+    public function setDiscountAmount(CartCoupon $coupon, float $amount): void;
 
     public function setDiscountPercent(CartCoupon $coupon, float $percent): void;
 
