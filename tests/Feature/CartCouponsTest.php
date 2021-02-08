@@ -294,4 +294,26 @@ class CartCouponsTest extends TestCase
         $this->assertEquals(2, $coupon->discount_quantity);
         $this->assertEquals(1, $coupon->discount_step);
     }
+
+    /**
+     * @test
+     */
+    public function can_update_free_shipping_and_applies_on_shipping(){
+        $coupon = cart()->couponsRepository->addCoupon([
+            "name" => "GOEDE BUREN",
+            "free_shipping" => true,
+            "apply_to_shipping" => true
+        ]);
+
+        $this->assertEquals(true, $coupon->free_shipping);
+        $this->assertEquals(true, $coupon->apply_to_shipping);
+
+        cart()->couponsRepository->setFreeShipping($coupon, false);
+
+        $this->assertEquals(false, $coupon->free_shipping);
+
+        cart()->couponsRepository->setAppliesToShipping($coupon, false);
+
+        $this->assertEquals(false, $coupon->apply_to_shipping);
+    }
 }

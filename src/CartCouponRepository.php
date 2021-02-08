@@ -98,11 +98,11 @@ class CartCouponRepository implements Contracts\CartCouponRepository
 
     public function setAppliesToShipping(CartCoupon $coupon, bool $applies): void
     {
-        // TODO: Implement setAppliesToShipping() method.
+        app(CartCouponDatabase::class)->setAppliesToShipping($coupon, $applies);
     }
 
     public function setFreeShipping(CartCoupon $coupon, bool $freeShipping): void
     {
-        // TODO: Implement setFreeShipping() method.
+        app(CartCouponDatabase::class)->setFreeShipping($coupon, $freeShipping);
     }
 }

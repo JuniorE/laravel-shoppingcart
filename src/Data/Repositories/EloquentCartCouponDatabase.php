@@ -147,11 +147,15 @@ class EloquentCartCouponDatabase implements CartCouponDatabase
 
     public function setAppliesToShipping(CartCoupon $coupon, bool $applies): void
     {
-        // TODO: Implement setAppliesToShipping() method.
+        $coupon->update([
+            "apply_to_shipping" => $applies
+        ]);
     }
 
     public function setFreeShipping(CartCoupon $coupon, bool $freeShipping): void
     {
-        // TODO: Implement setFreeShipping() method.
+        $coupon->update([
+            "free_shipping" => $freeShipping
+        ]);
     }
 }
