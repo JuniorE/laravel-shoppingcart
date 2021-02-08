@@ -73,7 +73,7 @@ class CartCouponRepository implements Contracts\CartCouponRepository
 
     public function setEndsOtherCoupons(CartCoupon $coupon, bool $endsOtherCoupons): void
     {
-        // TODO: Implement setEndsOtherCoupons() method.
+        app(CartCouponDatabase::class)->setEndsOtherCoupons($coupon, $endsOtherCoupons);
     }
 
     public function setDiscountAmount(CartCoupon $coupon, int $amount): void

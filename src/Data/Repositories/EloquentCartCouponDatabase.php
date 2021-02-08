@@ -112,7 +112,9 @@ class EloquentCartCouponDatabase implements CartCouponDatabase
 
     public function setEndsOtherCoupons(CartCoupon $coupon, bool $endsOtherCoupons): void
     {
-        // TODO: Implement setEndsOtherCoupons() method.
+        $coupon->update([
+            "ends_other_coupons" => $endsOtherCoupons
+        ]);
     }
 
     public function setDiscountAmount(CartCoupon $coupon, int $amount): void

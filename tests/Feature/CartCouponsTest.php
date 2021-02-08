@@ -224,4 +224,22 @@ class CartCouponsTest extends TestCase
         $this->assertContains(5, $coupon->conditions["contains_products"]);
         $this->assertContains(7, $coupon->conditions["contains_products"]);
     }
+
+    /**
+     * @test
+     */
+    public function can_update_ends_other_coupons(){
+        $coupon = cart()->couponsRepository->addCoupon([
+            "name" => "GOEDE BUREN",
+            "discount_percent" => 1,
+            "ends_other_coupons" => false
+        ]);
+
+        $this->assertFalse($coupon->ends_other_coupons);
+
+        cart()->couponsRepository->setEndsOtherCoupons($coupon, true);
+
+        $this->assertTrue($coupon->ends_other_coupons);
+    }
+
 }
