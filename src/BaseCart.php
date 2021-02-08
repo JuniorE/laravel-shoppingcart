@@ -24,6 +24,12 @@ abstract class BaseCart implements Contracts\Cart
      */
     public $couponsRepository;
 
+
+    /**
+     * @var CartShippingRatesRepository
+     */
+    public $shippingRateRepository;
+
     /**
      * @var string
      */
@@ -57,6 +63,7 @@ abstract class BaseCart implements Contracts\Cart
 
         $this->itemsRepository = new CartItemsRepository();
         $this->couponsRepository = new CartCouponRepository();
+        $this->shippingRateRepository = new CartShippingRatesRepository();
 
         session()->put(self::SESSION_CART_IDENTIFIER, $this->identifier);
     }

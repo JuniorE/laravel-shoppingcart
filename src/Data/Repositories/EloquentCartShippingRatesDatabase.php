@@ -11,7 +11,7 @@ class EloquentCartShippingRatesDatabase implements CartShippingRatesDatabase
 {
     public function addShippingRate(array $data): CartShippingRate
     {
-        // TODO: Implement addShippingRate() method.
+        return CartShippingRate::create($data);
     }
 
     public function setMethod(CartShippingRate $rate, string $method): void

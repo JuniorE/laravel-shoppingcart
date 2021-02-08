@@ -4,14 +4,15 @@
 namespace juniorE\ShoppingCart;
 
 
+use juniorE\ShoppingCart\Data\Interfaces\CartShippingRatesDatabase;
 use juniorE\ShoppingCart\Models\CartShippingRate;
 
-class CartShippingRates implements Contracts\CartShippingRatesRepository
+class CartShippingRatesRepository implements Contracts\CartShippingRatesRepository
 {
 
     public function addShippingRate(array $data): CartShippingRate
     {
-        // TODO: Implement addShippingRate() method.
+        return app(CartShippingRatesDatabase::class)->addShippingRate($data);
     }
 
     public function setMethod(CartShippingRate $rate, string $method): void
