@@ -88,6 +88,10 @@ class Cart extends BaseCart
 
     public function getShippingRate(): CartShippingRate
     {
-        $rates = $this->shippingRateRepository->shippingRatesForMethod($this->getCart()->shipping_method);
+        $rates = $this->shippingRateRepository->shippingRatesForMethod($this->getCart()->shipping_method)
+            ->where("minimum_cart_price", "<=", $this->getCart()->grand_total)
+            ->sortBy('minimum_cart_price');
+
+        return $rates->last();
     }
 }

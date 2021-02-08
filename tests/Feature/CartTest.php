@@ -255,76 +255,82 @@ class CartTest extends TestCase
         $this->assertEquals(14.12, round(cart()->getCart()->sub_total, 2));
         $this->assertEquals(0.85, round(cart()->getCart()->tax_total, 2));
     }
-//    /**
-//     * @test
-//     */
-//    public function can_get_best_shipping_rate_for_cart(){
-//        $truck = cart()->shippingRateRepository->addShippingRate([
-//            "method" => "truck",
-//            "price" => 20,
-//            "minimum_cart_price" => 0
-//        ]);
-//        $truck2 = cart()->shippingRateRepository->addShippingRate([
-//            "method" => "truck",
-//            "price" => 10,
-//            "minimum_cart_price" => 50
-//        ]);
-//        $truck3 = cart()->shippingRateRepository->addShippingRate([
-//            "method" => "truck",
-//            "price" => 0,
-//            "minimum_cart_price" => 100
-//        ]);
-//
-//        $plane = cart()->shippingRateRepository->addShippingRate([
-//            "method" => "plane",
-//            "price" => 25,
-//            "minimum_cart_price" => 110
-//        ]);
-//
-//        cart()->setShippingMethod("truck");
-//
-//        $this->assertCount(3, cart()->shippingRateRepository->shippingRatesForMethod("truck"));
-//
-//        cart()->addProduct([
-//            "plu" => 5,
-//            "price" => 5
-//        ]);
-//
-//        $this->assertEquals($truck->price, cart()->getShippingRate()->price);
-//
-//        cart()->addProduct([
-//            "plu" => 2,
-//            "price" => 45
-//        ]);
-//
-//        $this->assertEquals($truck2->price, cart()->getShippingRate()->price);
-//
-//        cart()->addProduct([
-//            "plu" => 3,
-//            "price" => 15
-//        ]);
-//
-//        $this->assertEquals($truck2->price, cart()->getShippingRate()->price);
-//
-//        cart()->addProduct([
-//            "plu" => 1,
-//            "price" => 34
-//        ]);
-//
-//        $this->assertEquals($truck2->price, cart()->getShippingRate()->price);
-//
-//        cart()->addProduct([
-//            "plu" => 6,
-//            "price" => 2
-//        ]);
-//
-//        $this->assertEquals($truck3->price, cart()->getShippingRate()->price);
-//
-//        cart()->addProduct([
-//            "plu" => 6,
-//            "price" => 40
-//        ]);
-//
-//        $this->assertEquals($truck3->price, cart()->getShippingRate()->price);
-//    }
+    /**
+     * @test
+     */
+    public function can_get_best_shipping_rate_for_cart(){
+        $truck = cart()->shippingRateRepository->addShippingRate([
+            "method" => "truck",
+            "price" => 20,
+            "minimum_cart_price" => 0
+        ]);
+        $truck2 = cart()->shippingRateRepository->addShippingRate([
+            "method" => "truck",
+            "price" => 10,
+            "minimum_cart_price" => 50
+        ]);
+        $truck3 = cart()->shippingRateRepository->addShippingRate([
+            "method" => "truck",
+            "price" => 0,
+            "minimum_cart_price" => 100
+        ]);
+
+        cart()->shippingRateRepository->addShippingRate([
+            "method" => "plane",
+            "price" => 25,
+            "minimum_cart_price" => 110
+        ]);
+
+        cart()->setShippingMethod("truck");
+
+        $this->assertCount(3, cart()->shippingRateRepository->shippingRatesForMethod("truck"));
+
+        cart()->addProduct([
+            "plu" => 5,
+            "price" => 5,
+            "quantity" => 1
+        ]);
+
+        $this->assertEquals($truck->price, cart()->getShippingRate()->price);
+
+        cart()->addProduct([
+            "plu" => 2,
+            "price" => 45,
+            "quantity" => 1
+        ]);
+
+        $this->assertEquals($truck2->price, cart()->getShippingRate()->price);
+
+        cart()->addProduct([
+            "plu" => 3,
+            "price" => 15,
+            "quantity" => 1
+        ]);
+
+        $this->assertEquals($truck2->price, cart()->getShippingRate()->price);
+
+        cart()->addProduct([
+            "plu" => 1,
+            "price" => 34,
+            "quantity" => 1
+        ]);
+
+        $this->assertEquals($truck2->price, cart()->getShippingRate()->price);
+
+        cart()->addProduct([
+            "plu" => 6,
+            "price" => 2,
+            "quantity" => 1
+        ]);
+
+        $this->assertEquals($truck3->price, cart()->getShippingRate()->price);
+
+        cart()->addProduct([
+            "plu" => 6,
+            "price" => 40,
+            "quantity" => 1
+        ]);
+
+        $this->assertEquals($truck3->price, cart()->getShippingRate()->price);
+    }
 }
