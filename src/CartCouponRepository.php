@@ -53,7 +53,7 @@ class CartCouponRepository implements Contracts\CartCouponRepository
 
     public function setUsagePerCoupon(CartCoupon $coupon, int $limit): void
     {
-        // TODO: Implement setUsagePerCoupon() method.
+        app(CartCouponDatabase::class)->setUsagePerCoupon($coupon, $limit);
     }
 
     public function increaseUsedCounter(CartCoupon $coupon, int $amount = 1): void

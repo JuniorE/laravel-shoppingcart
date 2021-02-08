@@ -74,7 +74,9 @@ class EloquentCartCouponDatabase implements CartCouponDatabase
 
     public function setUsagePerCoupon(CartCoupon $coupon, int $limit): void
     {
-        // TODO: Implement setUsagePerCoupon() method.
+        $coupon->update([
+            "uses_per_coupon" => $limit
+        ]);
     }
 
     public function increaseUsedCounter(CartCoupon $coupon, int $amount = 1): void

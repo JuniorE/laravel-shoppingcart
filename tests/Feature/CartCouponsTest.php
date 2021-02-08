@@ -139,4 +139,21 @@ class CartCouponsTest extends TestCase
 
         $this->assertEquals(15, $coupon->usage_per_customer);
     }
+
+    /**
+     * @test
+     */
+    public function can_update_usage_per_coupon(){
+        $coupon = cart()->couponsRepository->addCoupon([
+            "name" => "GOEDE BUREN",
+            "discount_percent" => 1,
+            "uses_per_coupon" => 10
+        ]);
+
+        $this->assertEquals(10, $coupon->uses_per_coupon);
+
+        cart()->couponsRepository->setUsagePerCoupon($coupon, 15);
+
+        $this->assertEquals(15, $coupon->uses_per_coupon);
+    }
 }
