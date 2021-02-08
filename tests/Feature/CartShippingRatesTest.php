@@ -10,27 +10,62 @@ class CartShippingRatesTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * @test
+     * @var CartShippingRate
      */
-    public function can_make_a_shipping_rate(){
-        $invoice = cart()->shippingRateRepository->addShippingRate([
+    private $invoice;
+
+    /**
+     * @var CartShippingRate
+     */
+    private $invoiceFree;
+
+    /**
+     * @var CartShippingRate
+     */
+    private $cash;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->invoice = cart()->shippingRateRepository->addShippingRate([
             "method" => "invoice",
             "price" => 10,
             "minimum_cart_price" => 0
         ]);
 
-        $cash = cart()->shippingRateRepository->addShippingRate([
+        $this->invoiceFree = cart()->shippingRateRepository->addShippingRate([
+            "method" => "invoice",
+            "price" => 0,
+            "minimum_cart_price" => 50
+        ]);
+
+        $this->cash = cart()->shippingRateRepository->addShippingRate([
             "method" => "cash",
             "price" => 0,
             "minimum_cart_price" => 0
         ]);
+    }
 
-        $this->assertEquals("invoice", $invoice->method);
-        $this->assertEquals("cash", $cash->method);
+    /**
+     * @test
+     */
+    public function can_make_a_shipping_rate(){
+        $this->assertEquals("invoice", $this->invoice->method);
+        $this->assertEquals("invoice", $this->invoiceFree->method);
+        $this->assertEquals("cash", $this->cash->method);
 
-        $this->assertEquals(10, $invoice->price);
-        $this->assertEquals(0, $cash->price);
+        $this->assertEquals(10, $this->invoice->price);
+        $this->assertEquals(0, $this->invoiceFree->price);
+        $this->assertEquals(0, $this->cash->price);
 
         $this->assertCount(2, CartShippingRate::all());
+    }
+
+    /**
+     * @test
+     */
+    public function can_set_method_of_shipping_rate(){
+        $this->assertTrue(true);
     }
 }
