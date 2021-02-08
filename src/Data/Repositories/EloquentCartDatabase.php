@@ -25,13 +25,15 @@ class EloquentCartDatabase implements CartDatabase
 
     public function createCartItem(array $product): CartItem
     {
-        return CartItem::create(
+        $cartItem = CartItem::create(
             collect($product)
                 ->merge([
                     "tax_amount" => ($product["price"] ?? 0) * ($product["tax_percent"] ?? 0)
                 ])
                 ->toArray()
         );
+        $this->updateTotal();
+        return $cartItem;
     }
 
     public function getCartItem(int $id): CartItem
@@ -85,6 +87,26 @@ class EloquentCartDatabase implements CartDatabase
         $cart->update([
             'additional' => collect($cart->additional)
                 ->merge($data)
+        ]);
+    }
+
+    public function updateTotal()
+    {
+        $cart = cart()->getCart();
+        $total = cart()->items()->reduce(function($carry, CartItem $item) {
+            return $carry + $item->price * $item->quantity;
+        });
+
+        $subtotal = cart()->items()->reduce(function($carry, CartItem $item) {
+            return $carry + ($item->price * $item->quantity) / (1 + $item->tax_percent);
+        });
+
+        $taxes = $total - $subtotal;
+
+        $cart->update([
+            "grand_total" => $total,
+            "tax_total" => $taxes,
+            "sub_total" => $subtotal
         ]);
     }
 }

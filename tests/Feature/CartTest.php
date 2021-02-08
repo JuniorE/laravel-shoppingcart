@@ -237,7 +237,24 @@ class CartTest extends TestCase
 
         $this->assertEquals("truck", cart()->getCart()->shipping_method);
     }
-    
+
+    /**
+     * @test
+     */
+    public function get_total_price(){
+        $this->assertEquals(0, cart()->getCart()->grand_total);
+
+        cart()->addProduct([
+            "plu" => 5,
+            "price" => 4.99,
+            "quantity" => 3,
+            "tax_percent" => 0.06
+        ]);
+
+        $this->assertEquals(14.97, round(cart()->getCart()->grand_total, 2));
+        $this->assertEquals(14.12, round(cart()->getCart()->sub_total, 2));
+        $this->assertEquals(0.85, round(cart()->getCart()->tax_total, 2));
+    }
 //    /**
 //     * @test
 //     */
