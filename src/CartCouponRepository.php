@@ -5,6 +5,7 @@ namespace juniorE\ShoppingCart;
 
 
 use Carbon\Carbon;
+use juniorE\ShoppingCart\Data\Interfaces\CartCouponDatabase;
 use juniorE\ShoppingCart\Models\CartCoupon;
 
 class CartCouponRepository implements Contracts\CartCouponRepository
@@ -12,14 +13,12 @@ class CartCouponRepository implements Contracts\CartCouponRepository
 
     public function addCoupon(array $data): CartCoupon
     {
-        return CartCoupon::create($data);
+        return app(CartCouponDatabase::class)->addCoupon($data);
     }
 
     public function setName(CartCoupon $coupon, string $name): void
     {
-        $coupon->update([
-            "name" => $name
-        ]);
+        app(CartCouponDatabase::class)->setName($coupon, $name);
     }
 
     public function setDescription(CartCoupon $coupon, string $description): void

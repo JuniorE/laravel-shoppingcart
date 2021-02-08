@@ -10,14 +10,16 @@ use juniorE\ShoppingCart\Models\CartCoupon;
 
 class EloquentCartCouponDatabase implements CartCouponDatabase
 {
-    public function addCoupon(array $data): void
+    public function addCoupon(array $data): CartCoupon
     {
-        CartCoupon::create($data);
+        return CartCoupon::create($data);
     }
 
     public function setName(CartCoupon $coupon, string $name): void
     {
-        // TODO: Implement setName() method.
+        $coupon->update([
+            "name" => $name
+        ]);
     }
 
     public function setDescription(CartCoupon $coupon, string $description): void
