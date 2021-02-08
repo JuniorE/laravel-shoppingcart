@@ -27,7 +27,7 @@ class CartShippingRatesRepository implements Contracts\CartShippingRatesReposito
 
     public function setPrice(CartShippingRate $rate, float $price): void
     {
-        // TODO: Implement setPrice() method.
+        app(CartShippingRatesDatabase::class)->setPrice($rate, $price);
     }
 
     public function setMinimumCartPrice(CartShippingRate $rate, float $price): void

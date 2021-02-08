@@ -89,4 +89,16 @@ class CartShippingRatesTest extends TestCase
 
         $this->assertEquals("lorem ipsum", $this->invoice->method_description);
     }
+
+    /**
+     * @test
+     */
+    public function can_set_price_of_shipping_rate(){
+        $this->assertEquals(10, $this->invoice->price);
+
+        cart()->shippingRateRepository->setPrice($this->invoice, 20);
+
+        $this->assertEquals(20, $this->invoice->price);
+        $this->assertEquals(0, $this->invoiceFree->price);
+    }
 }
