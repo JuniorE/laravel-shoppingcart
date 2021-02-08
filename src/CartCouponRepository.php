@@ -63,12 +63,12 @@ class CartCouponRepository implements Contracts\CartCouponRepository
 
     public function setConditional(CartCoupon $coupon, bool $conditional): void
     {
-        // TODO: Implement setConditional() method.
+        app(CartCouponDatabase::class)->setConditional($coupon, $conditional);
     }
 
     public function setConditions(CartCoupon $coupon, array $conditions): void
     {
-        // TODO: Implement setConditions() method.
+        app(CartCouponDatabase::class)->setConditions($coupon, $conditions);
     }
 
     public function setEndsOtherCoupons(CartCoupon $coupon, bool $endsOtherCoupons): void

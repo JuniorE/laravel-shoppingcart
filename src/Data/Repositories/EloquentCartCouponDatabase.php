@@ -97,12 +97,17 @@ class EloquentCartCouponDatabase implements CartCouponDatabase
 
     public function setConditional(CartCoupon $coupon, bool $conditional): void
     {
-        // TODO: Implement setConditional() method.
+        $coupon->update([
+            "conditional" => $conditional
+        ]);
     }
 
     public function setConditions(CartCoupon $coupon, array $conditions): void
     {
-        // TODO: Implement setConditions() method.
+        $coupon->update([
+            "conditions" => collect($coupon->conditions)
+                ->merge($conditions)
+        ]);
     }
 
     public function setEndsOtherCoupons(CartCoupon $coupon, bool $endsOtherCoupons): void

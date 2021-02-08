@@ -189,4 +189,39 @@ class CartCouponsTest extends TestCase
 
         $this->assertEquals(10, $coupon->times_used);
     }
+
+    /**
+     * @test
+     */
+    public function can_update_conditional_and_conditions(){
+        $coupon = cart()->couponsRepository->addCoupon([
+            "name" => "GOEDE BUREN",
+            "discount_percent" => 1,
+            "uses_per_coupon" => 10,
+            "conditional" => false
+        ]);
+
+        $this->assertFalse($coupon->conditional);
+
+        cart()->couponsRepository->setConditional($coupon, true);
+
+        $this->assertTrue($coupon->conditional);
+
+        cart()->couponsRepository->setConditions($coupon, [
+            "minimum_price" => 50,
+            "contains_products" => [5, 7]
+        ]);
+
+        $this->assertEquals(50, $coupon->conditions["minimum_price"]);
+        $this->assertContains(5, $coupon->conditions["contains_products"]);
+        $this->assertContains(7, $coupon->conditions["contains_products"]);
+
+        cart()->couponsRepository->setConditions($coupon, [
+            "minimum_price" => 25
+        ]);
+
+        $this->assertEquals(25, $coupon->conditions["minimum_price"]);
+        $this->assertContains(5, $coupon->conditions["contains_products"]);
+        $this->assertContains(7, $coupon->conditions["contains_products"]);
+    }
 }
