@@ -257,4 +257,20 @@ class CartCouponsTest extends TestCase
 
         $this->assertEquals(75, $coupon->discount_amount);
     }
+
+    /**
+     * @test
+     */
+    public function can_update_discount_percent(){
+        $coupon = cart()->couponsRepository->addCoupon([
+            "name" => "GOEDE BUREN",
+            "discount_percent" => 0.10,
+        ]);
+
+        $this->assertEquals(0.10, $coupon->discount_percent);
+
+        cart()->couponsRepository->setDiscountPercent($coupon, 1);
+
+        $this->assertEquals(1, $coupon->discount_percent);
+    }
 }

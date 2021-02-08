@@ -126,7 +126,9 @@ class EloquentCartCouponDatabase implements CartCouponDatabase
 
     public function setDiscountPercent(CartCoupon $coupon, float $percent): void
     {
-        // TODO: Implement setDiscountPercent() method.
+        $coupon->update([
+            "discount_percent" => $percent
+        ]);
     }
 
     public function setDiscountQuantity(CartCoupon $coupon, int $quantity): void

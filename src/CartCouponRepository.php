@@ -83,7 +83,7 @@ class CartCouponRepository implements Contracts\CartCouponRepository
 
     public function setDiscountPercent(CartCoupon $coupon, float $percent): void
     {
-        // TODO: Implement setDiscountPercent() method.
+        app(CartCouponDatabase::class)->setDiscountPercent($coupon, $percent);
     }
 
     public function setDiscountQuantity(CartCoupon $coupon, int $quantity): void
