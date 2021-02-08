@@ -182,4 +182,20 @@ class CartTest extends TestCase
 
         $this->assertEquals("Peanut Allergy", cart()->getCart()->additional["comment"]);
     }
+
+    /**
+     * @test
+     */
+    public function can_update_identifier(){
+        $customerId = 10;
+        $identifier = md5($customerId);
+        cart()->addProduct([
+            "plu" => 5
+        ]);
+
+        cart()->updateIdentifier($identifier);
+
+        $this->assertEquals($identifier, cart()->identifier);
+        $this->assertEquals($identifier, session("cart_identifier"));
+    }
 }

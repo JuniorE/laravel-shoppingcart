@@ -69,4 +69,14 @@ class Cart extends BaseCart
     {
         app(VisitsHistoryDatabase::class)->markVisited($plu);
     }
+
+    public function updateIdentifier(string $identifier): void
+    {
+        $this->getCart()->update([
+            "identifier" => $identifier
+        ]);
+
+        $this->identifier = $identifier;
+        session()->put(self::SESSION_CART_IDENTIFIER, $identifier);
+    }
 }

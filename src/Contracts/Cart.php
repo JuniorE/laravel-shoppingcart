@@ -64,4 +64,6 @@ interface Cart
     public function destroy(): void;
 
     public function markVisited(string $plu): void;
+
+    public function updateIdentifier(string $identifier): void;
 }
