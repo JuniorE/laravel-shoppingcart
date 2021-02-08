@@ -9,6 +9,7 @@ use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Data\Interfaces\VisitsHistoryDatabase;
 use juniorE\ShoppingCart\Models\CartCoupon;
 use juniorE\ShoppingCart\Models\CartItem;
+use juniorE\ShoppingCart\Models\CartShippingRate;
 
 class Cart extends BaseCart
 {
@@ -50,6 +51,11 @@ class Cart extends BaseCart
         $database->setConversionTime(now()->diffInMinutes($this->getCart()->created_at));
     }
 
+    public function setShippingMethod(string $method): void
+    {
+        app(CartDatabase::class)->setShippingMethod($method);
+    }
+
     public function setAdditionalData(array $data)
     {
         app(CartDatabase::class)->setAdditionalData($data);
@@ -78,5 +84,10 @@ class Cart extends BaseCart
 
         $this->identifier = $identifier;
         session()->put(self::SESSION_CART_IDENTIFIER, $identifier);
+    }
+
+    public function getShippingRate(): CartShippingRate
+    {
+        $rates = $this->shippingRateRepository->shippingRatesForMethod($this->getCart()->shipping_method);
     }
 }

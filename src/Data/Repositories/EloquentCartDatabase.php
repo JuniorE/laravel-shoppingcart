@@ -56,6 +56,13 @@ class EloquentCartDatabase implements CartDatabase
         ]);
     }
 
+    public function setShippingMethod(string $method): void
+    {
+        cart()->getCart()->update([
+            "shipping_method" => $method
+        ]);
+    }
+
     public function setConversionTime(int $minutes): void
     {
         cart()->getCart()->update([

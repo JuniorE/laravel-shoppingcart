@@ -4,6 +4,7 @@
 namespace juniorE\ShoppingCart\Data\Repositories;
 
 
+use Illuminate\Support\Collection;
 use juniorE\ShoppingCart\Data\Interfaces\CartShippingRatesDatabase;
 use juniorE\ShoppingCart\Models\CartShippingRate;
 
@@ -40,5 +41,10 @@ class EloquentCartShippingRatesDatabase implements CartShippingRatesDatabase
         $rate->update([
             "minimum_cart_price" => $price
         ]);
+    }
+
+    public function shippingRatesForMethod(string $method): Collection
+    {
+        return CartShippingRate::where("method", $method)->get();
     }
 }

@@ -4,10 +4,17 @@
 namespace juniorE\ShoppingCart\Data\Interfaces;
 
 
+use Illuminate\Support\Collection;
 use juniorE\ShoppingCart\Models\CartShippingRate;
 
 interface CartShippingRatesDatabase
 {
+    /**
+     * @param string $method
+     * @return Collection|CartShippingRate[]
+     */
+    public function shippingRatesForMethod(string $method): Collection;
+
     public function addShippingRate(array $data): CartShippingRate;
 
     public function setMethod(CartShippingRate $rate, string $method): void;

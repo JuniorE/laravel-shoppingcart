@@ -7,6 +7,7 @@ namespace juniorE\ShoppingCart\Contracts;
 use Illuminate\Support\Collection;
 use juniorE\ShoppingCart\Models\CartCoupon;
 use juniorE\ShoppingCart\Models\CartItem;
+use juniorE\ShoppingCart\Models\CartShippingRate;
 
 interface Cart
 {
@@ -43,6 +44,15 @@ interface Cart
      */
     public function setCheckoutMethod(string $checkoutMethod): void;
 
+
+    /**
+     * Set the shippingMethod
+     *
+     * @param string $checkoutMethod
+     * @return mixed
+     */
+    public function setShippingMethod(string $checkoutMethod): void;
+
     /**
      * Get Items from cart
      * 
@@ -66,4 +76,6 @@ interface Cart
     public function markVisited(string $plu): void;
 
     public function updateIdentifier(string $identifier): void;
+
+    public function getShippingRate(): CartShippingRate;
 }
