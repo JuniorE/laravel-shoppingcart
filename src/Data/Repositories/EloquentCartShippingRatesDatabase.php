@@ -37,6 +37,8 @@ class EloquentCartShippingRatesDatabase implements CartShippingRatesDatabase
 
     public function setMinimumCartPrice(CartShippingRate $rate, float $price): void
     {
-        // TODO: Implement setMinimumCartPrice() method.
+        $rate->update([
+            "minimum_cart_price" => $price
+        ]);
     }
 }

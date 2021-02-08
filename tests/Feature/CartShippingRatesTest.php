@@ -101,4 +101,17 @@ class CartShippingRatesTest extends TestCase
         $this->assertEquals(20, $this->invoice->price);
         $this->assertEquals(0, $this->invoiceFree->price);
     }
+
+    /**
+     * @test
+     */
+    public function can_set_minimum_cart_price(){
+        $this->assertEquals(0, $this->invoice->minimum_cart_price);
+        $this->assertEquals(50, $this->invoiceFree->minimum_cart_price);
+
+        cart()->shippingRateRepository->setMinimumCartPrice($this->invoiceFree, 100);
+
+        $this->assertEquals(0, $this->invoice->minimum_cart_price);
+        $this->assertEquals(100, $this->invoiceFree->minimum_cart_price);
+    }
 }
