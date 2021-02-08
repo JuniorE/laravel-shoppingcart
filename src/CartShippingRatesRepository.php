@@ -17,7 +17,7 @@ class CartShippingRatesRepository implements Contracts\CartShippingRatesReposito
 
     public function setMethod(CartShippingRate $rate, string $method): void
     {
-        // TODO: Implement setMethod() method.
+        app(CartShippingRatesDatabase::class)->setMethod($rate, $method);
     }
 
     public function setMethodDescription(CartShippingRate $rate, string $description): void

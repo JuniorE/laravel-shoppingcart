@@ -59,13 +59,23 @@ class CartShippingRatesTest extends TestCase
         $this->assertEquals(0, $this->invoiceFree->price);
         $this->assertEquals(0, $this->cash->price);
 
-        $this->assertCount(2, CartShippingRate::all());
+        $this->assertCount(3, CartShippingRate::all());
     }
 
     /**
      * @test
      */
     public function can_set_method_of_shipping_rate(){
-        $this->assertTrue(true);
+        $mistakeInvoice = cart()->shippingRateRepository->addShippingRate([
+            "method" => "cash",
+            "price" => 0,
+            "minimum_cart_price" => 0
+        ]);
+
+        $this->assertEquals("cash", $mistakeInvoice->method);
+
+        cart()->shippingRateRepository->setMethod($mistakeInvoice, "invoice");
+
+        $this->assertEquals("invoice", $mistakeInvoice->method);
     }
 }
