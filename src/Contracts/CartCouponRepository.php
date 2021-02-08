@@ -1,13 +1,13 @@
 <?php
 
 
-namespace juniorE\ShoppingCart\Data\Interfaces;
+namespace juniorE\ShoppingCart\Contracts;
 
 
 use Carbon\Carbon;
 use juniorE\ShoppingCart\Models\CartCoupon;
 
-interface CartCouponDatabase
+interface CartCouponRepository
 {
     public function addCoupon(array $data): void;
 

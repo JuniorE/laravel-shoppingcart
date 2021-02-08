@@ -1,15 +1,15 @@
 <?php
 
 
-namespace juniorE\ShoppingCart\Data\Repositories;
+namespace juniorE\ShoppingCart;
 
 
 use Carbon\Carbon;
-use juniorE\ShoppingCart\Data\Interfaces\CartCouponDatabase;
 use juniorE\ShoppingCart\Models\CartCoupon;
 
-class EloquentCartCouponDatabase implements CartCouponDatabase
+class CartCouponRepository implements Contracts\CartCouponRepository
 {
+
     public function addCoupon(array $data): void
     {
         CartCoupon::create($data);

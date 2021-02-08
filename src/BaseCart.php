@@ -20,6 +20,11 @@ abstract class BaseCart implements Contracts\Cart
     public $itemsRepository;
 
     /**
+     * @var CartCouponRepository
+     */
+    public $couponsRepository;
+
+    /**
      * @var string
      */
     public $identifier;
@@ -51,6 +56,7 @@ abstract class BaseCart implements Contracts\Cart
         }
 
         $this->itemsRepository = new CartItemsRepository();
+        $this->couponsRepository = new CartCouponRepository();
 
         session()->put(self::SESSION_CART_IDENTIFIER, $this->identifier);
     }
