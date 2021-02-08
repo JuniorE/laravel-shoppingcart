@@ -133,12 +133,16 @@ class EloquentCartCouponDatabase implements CartCouponDatabase
 
     public function setDiscountQuantity(CartCoupon $coupon, int $quantity): void
     {
-        // TODO: Implement setDiscountQuantity() method.
+        $coupon->update([
+            "discount_quantity" => $quantity
+        ]);
     }
 
     public function setDiscountStep(CartCoupon $coupon, int $step): void
     {
-        // TODO: Implement setDiscountStep() method.
+        $coupon->update([
+            "discount_step" => $step
+        ]);
     }
 
     public function setAppliesToShipping(CartCoupon $coupon, bool $applies): void

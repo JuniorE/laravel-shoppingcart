@@ -88,12 +88,12 @@ class CartCouponRepository implements Contracts\CartCouponRepository
 
     public function setDiscountQuantity(CartCoupon $coupon, int $quantity): void
     {
-        // TODO: Implement setDiscountQuantity() method.
+        app(CartCouponDatabase::class)->setDiscountQuantity($coupon, $quantity);
     }
 
     public function setDiscountStep(CartCoupon $coupon, int $step): void
     {
-        // TODO: Implement setDiscountStep() method.
+        app(CartCouponDatabase::class)->setDiscountStep($coupon, $step);
     }
 
     public function setAppliesToShipping(CartCoupon $coupon, bool $applies): void
