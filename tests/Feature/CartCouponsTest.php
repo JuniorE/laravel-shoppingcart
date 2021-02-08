@@ -62,4 +62,21 @@ class CartCouponsTest extends TestCase
 
         $this->assertEquals("GOEDE BUREN", $coupon->description);
     }
+
+    /**
+     * @test
+     */
+    public function can_update_status(){
+        $coupon = cart()->couponsRepository->addCoupon([
+            "name" => "GOEDE BUREN",
+            "status" => false,
+            "discount_percent" => 1
+        ]);
+
+        $this->assertEquals(false, $coupon->status);
+
+        cart()->couponsRepository->setStatus($coupon, true);
+
+        $this->assertEquals(true, $coupon->status);
+    }
 }

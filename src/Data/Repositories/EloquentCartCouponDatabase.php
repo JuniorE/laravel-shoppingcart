@@ -31,7 +31,9 @@ class EloquentCartCouponDatabase implements CartCouponDatabase
 
     public function setStatus(CartCoupon $coupon, bool $status): void
     {
-        // TODO: Implement setStatus() method.
+        $coupon->update([
+            "status" => $status
+        ]);
     }
 
     public function setCouponType(CartCoupon $coupon, int $type): void

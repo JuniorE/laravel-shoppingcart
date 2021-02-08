@@ -28,7 +28,7 @@ class CartCouponRepository implements Contracts\CartCouponRepository
 
     public function setStatus(CartCoupon $coupon, bool $status): void
     {
-        // TODO: Implement setStatus() method.
+        app(CartCouponDatabase::class)->setStatus($coupon, $status);
     }
 
     public function setCouponType(CartCoupon $coupon, int $type): void
