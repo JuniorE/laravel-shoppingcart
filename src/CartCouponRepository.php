@@ -23,7 +23,7 @@ class CartCouponRepository implements Contracts\CartCouponRepository
 
     public function setDescription(CartCoupon $coupon, string $description): void
     {
-        // TODO: Implement setDescription() method.
+        app(CartCouponDatabase::class)->setDescription($coupon, $description);
     }
 
     public function setStatus(CartCoupon $coupon, bool $status): void

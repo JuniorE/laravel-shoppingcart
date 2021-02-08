@@ -45,4 +45,21 @@ class CartCouponsTest extends TestCase
 
         $this->assertEquals("GOEDE BUREN", $coupon->name);
     }
+
+    /**
+     * @test
+     */
+    public function can_update_description(){
+        $coupon = cart()->couponsRepository->addCoupon([
+            "name" => "GOEDE BUREN",
+            "description" => "Omdat we goeie buren zijn",
+            "discount_percent" => 1
+        ]);
+
+        $this->assertEquals("Omdat we goeie buren zijn", $coupon->description);
+
+        cart()->couponsRepository->setDescription($coupon, "GOEDE BUREN");
+
+        $this->assertEquals("GOEDE BUREN", $coupon->description);
+    }
 }

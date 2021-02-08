@@ -24,7 +24,9 @@ class EloquentCartCouponDatabase implements CartCouponDatabase
 
     public function setDescription(CartCoupon $coupon, string $description): void
     {
-        // TODO: Implement setDescription() method.
+        $coupon->update([
+            "description" => $description
+        ]);
     }
 
     public function setStatus(CartCoupon $coupon, bool $status): void
