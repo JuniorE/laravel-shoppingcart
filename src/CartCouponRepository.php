@@ -58,7 +58,7 @@ class CartCouponRepository implements Contracts\CartCouponRepository
 
     public function increaseUsedCounter(CartCoupon $coupon, int $amount = 1): void
     {
-        // TODO: Implement increaseUsedCounter() method.
+        app(CartCouponDatabase::class)->increaseUsedCounter($coupon, $amount);
     }
 
     public function setConditional(CartCoupon $coupon, bool $conditional): void

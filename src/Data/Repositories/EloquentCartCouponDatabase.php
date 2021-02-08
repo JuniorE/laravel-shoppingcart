@@ -81,7 +81,18 @@ class EloquentCartCouponDatabase implements CartCouponDatabase
 
     public function increaseUsedCounter(CartCoupon $coupon, int $amount = 1): void
     {
-        // TODO: Implement increaseUsedCounter() method.
+        if ($amount < 0)
+            return;
+
+
+        $count = $coupon->times_used + $amount;
+        if ($count > $coupon->uses_per_coupon) {
+            return;
+        }
+
+        $coupon->update([
+            "times_used" => $count
+        ]);
     }
 
     public function setConditional(CartCoupon $coupon, bool $conditional): void

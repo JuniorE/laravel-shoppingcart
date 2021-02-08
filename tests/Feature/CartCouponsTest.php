@@ -156,4 +156,37 @@ class CartCouponsTest extends TestCase
 
         $this->assertEquals(15, $coupon->uses_per_coupon);
     }
+
+    /**
+     * @test
+     */
+    public function can_increase_used_counter(){
+        $coupon = cart()->couponsRepository->addCoupon([
+            "name" => "GOEDE BUREN",
+            "discount_percent" => 1,
+            "uses_per_coupon" => 10
+        ]);
+
+        $this->assertEquals(0, $coupon->times_used);
+
+        cart()->couponsRepository->increaseUsedCounter($coupon);
+
+        $this->assertEquals(1, $coupon->times_used);
+
+        cart()->couponsRepository->increaseUsedCounter($coupon, 1);
+
+        $this->assertEquals(2, $coupon->times_used);
+
+        cart()->couponsRepository->increaseUsedCounter($coupon, 6);
+
+        $this->assertEquals(8, $coupon->times_used);
+
+        cart()->couponsRepository->increaseUsedCounter($coupon, 2);
+
+        $this->assertEquals(10, $coupon->times_used);
+
+        cart()->couponsRepository->increaseUsedCounter($coupon);
+
+        $this->assertEquals(10, $coupon->times_used);
+    }
 }
