@@ -78,4 +78,15 @@ class CartShippingRatesTest extends TestCase
 
         $this->assertEquals("invoice", $mistakeInvoice->method);
     }
+    
+    /**
+     * @test
+     */
+    public function can_set_method_description(){
+        $this->assertNull($this->invoice->method_description);
+
+        cart()->shippingRateRepository->setMethodDescription($this->invoice, "lorem ipsum");
+
+        $this->assertEquals("lorem ipsum", $this->invoice->method_description);
+    }
 }

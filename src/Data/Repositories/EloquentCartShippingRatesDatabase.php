@@ -23,7 +23,9 @@ class EloquentCartShippingRatesDatabase implements CartShippingRatesDatabase
 
     public function setMethodDescription(CartShippingRate $rate, string $description): void
     {
-        // TODO: Implement setMethodDescription() method.
+        $rate->update([
+            "method_description" => $description
+        ]);
     }
 
     public function setPrice(CartShippingRate $rate, float $price): void

@@ -22,7 +22,7 @@ class CartShippingRatesRepository implements Contracts\CartShippingRatesReposito
 
     public function setMethodDescription(CartShippingRate $rate, string $description): void
     {
-        // TODO: Implement setMethodDescription() method.
+        app(CartShippingRatesDatabase::class)->setMethodDescription($rate, $description);
     }
 
     public function setPrice(CartShippingRate $rate, float $price): void
