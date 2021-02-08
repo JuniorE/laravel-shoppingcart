@@ -2,6 +2,7 @@
 
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use juniorE\ShoppingCart\Enums\CouponTypes;
 use juniorE\ShoppingCart\Tests\TestCase;
 
 use \juniorE\ShoppingCart\Models\CartCoupon;
@@ -78,5 +79,22 @@ class CartCouponsTest extends TestCase
         cart()->couponsRepository->setStatus($coupon, true);
 
         $this->assertEquals(true, $coupon->status);
+    }
+
+    /**
+     * @test
+     */
+    public function can_update_type(){
+        $coupon = cart()->couponsRepository->addCoupon([
+            "name" => "GOEDE BUREN",
+            "discount_percent" => 1,
+            "coupon_type" => CouponTypes::PERCENT
+        ]);
+
+        $this->assertEquals(CouponTypes::PERCENT, $coupon->coupon_type);
+
+        cart()->couponsRepository->setCouponType($coupon, CouponTypes::STEP);
+
+        $this->assertEquals(CouponTypes::STEP, $coupon->coupon_type);
     }
 }

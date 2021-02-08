@@ -33,7 +33,7 @@ class CartCouponRepository implements Contracts\CartCouponRepository
 
     public function setCouponType(CartCoupon $coupon, int $type): void
     {
-        // TODO: Implement setCouponType() method.
+        app(CartCouponDatabase::class)->setCouponType($coupon, $type);
     }
 
     public function setStart(CartCoupon $coupon, Carbon $start): void

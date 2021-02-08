@@ -38,7 +38,9 @@ class EloquentCartCouponDatabase implements CartCouponDatabase
 
     public function setCouponType(CartCoupon $coupon, int $type): void
     {
-        // TODO: Implement setCouponType() method.
+        $coupon->update([
+            "coupon_type" => $type
+        ]);
     }
 
     public function setStart(CartCoupon $coupon, Carbon $start): void
