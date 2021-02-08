@@ -2,7 +2,9 @@
     "name": "juniore/shoppingcart",
     "description": "Laravel shopping cart",
     "license": "MIT",
-    "require": {},
+    "require": {
+        "digitalmove/k-nearest": "dev-master"
+    },
     "require-dev": {
         "orchestra/testbench": "^6.11"
     },

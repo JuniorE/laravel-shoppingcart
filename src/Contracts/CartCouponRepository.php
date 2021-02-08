@@ -9,7 +9,7 @@ use juniorE\ShoppingCart\Models\CartCoupon;
 
 interface CartCouponRepository
 {
-    public function addCoupon(array $data): void;
+    public function addCoupon(array $data): CartCoupon;
 
     public function setName(CartCoupon $coupon, string $name): void;
 

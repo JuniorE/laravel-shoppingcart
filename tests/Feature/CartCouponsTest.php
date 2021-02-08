@@ -29,4 +29,20 @@ class CartCouponsTest extends TestCase
         $this->assertNotNull(CartCoupon::firstWhere('name', '=', 'WELCOME10'));
         $this->assertNotNull(CartCoupon::firstWhere('name', '=', 'GOEDE BUREN'));
     }
+    
+    /**
+     * @test
+     */
+    public function can_update_name(){
+        $coupon = cart()->couponsRepository->addCoupon([
+            "name" => "WELCOME10",
+            "discount_percent" => 1
+        ]);
+
+        $this->assertEquals("WELCOME10", $coupon->name);
+
+        cart()->couponsRepository->setName($coupon, "GOEDE BUREN");
+
+        $this->assertEquals("GOEDE BUREN", $coupon->name);
+    }
 }
