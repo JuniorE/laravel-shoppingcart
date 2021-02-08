@@ -38,12 +38,12 @@ class CartCouponRepository implements Contracts\CartCouponRepository
 
     public function setStart(CartCoupon $coupon, Carbon $start): void
     {
-        // TODO: Implement setStart() method.
+        app(CartCouponDatabase::class)->setStart($coupon, $start);
     }
 
     public function setEnd(CartCoupon $coupon, Carbon $end): void
     {
-        // TODO: Implement setEnd() method.
+        app(CartCouponDatabase::class)->setEnd($coupon, $end);
     }
 
     public function setUsagePerCustomer(CartCoupon $coupon, int $limit): void

@@ -45,12 +45,24 @@ class EloquentCartCouponDatabase implements CartCouponDatabase
 
     public function setStart(CartCoupon $coupon, Carbon $start): void
     {
-        // TODO: Implement setStart() method.
+        if ($coupon->ends_till && $start > $coupon->ends_till) {
+            return;
+        }
+
+        $coupon->update([
+            "starts_from" => $start
+        ]);
     }
 
     public function setEnd(CartCoupon $coupon, Carbon $end): void
     {
-        // TODO: Implement setEnd() method.
+        if ($coupon->starts_from && $end < $coupon->starts_from) {
+            return;
+        }
+
+        $coupon->update([
+            "ends_till" => $end
+        ]);
     }
 
     public function setUsagePerCustomer(CartCoupon $coupon, int $limit): void

@@ -97,4 +97,29 @@ class CartCouponsTest extends TestCase
 
         $this->assertEquals(CouponTypes::STEP, $coupon->coupon_type);
     }
+
+    /**
+     * @test
+     */
+    public function can_set_start_and_end(){
+        $coupon = cart()->couponsRepository->addCoupon([
+            "name" => "GOEDE BUREN"
+        ]);
+
+        $this->assertNull($coupon->starts_from);
+        $this->assertNull($coupon->ends_till);
+
+        $start = now();
+        $end = now()->addMonth();
+
+        cart()->couponsRepository->setStart($coupon, $start);
+        cart()->couponsRepository->setEnd($coupon, $end);
+
+        $this->assertEquals($start->format('Y-m-d'), $coupon->starts_from->format('Y-m-d'));
+        $this->assertEquals($end->format('Y-m-d'), $coupon->ends_till->format('Y-m-d'));
+
+        cart()->couponsRepository->setEnd($coupon, $end->clone()->subMonths(2));
+
+        $this->assertEquals($end->format('Y-m-d'), $coupon->ends_till->format('Y-m-d'));
+    }
 }
