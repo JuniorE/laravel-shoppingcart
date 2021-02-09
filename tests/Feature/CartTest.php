@@ -206,15 +206,19 @@ class CartTest extends TestCase
     public function can_add_coupon_to_cart(){
         $coupon = cart()->couponsRepository->addCoupon([
             "name" => "WELCOME10",
-            "discount_percent" => 0.10
+            "discount_percent" => 0.10,
         ]);
 
         $product = cart()->addProduct([
-            "plu" => 5
+            "plu" => 5,
+            "price" => 4.99,
+            "quantity" => 1
         ]);
 
         $product2 = cart()->addProduct([
-            "plu" => 6
+            "plu" => 6,
+            "price" => 4.99,
+            "quantity" => 1
         ]);
 
         cart()->itemsRepository->setCouponCode($product, $coupon->name);
@@ -424,5 +428,59 @@ class CartTest extends TestCase
         cart()->addProduct($espresso);
 
         $this->assertEquals($espresso["price"] + $machiato["price"], cart()->getCart()->grand_total);
+    }
+
+    /**
+     * @test
+     */
+    public function can_add_coupon_to_cart_item_and_is_coupon_calculated_correctly(){
+        $cookie = [
+            "plu" => 9,
+            "price" => 0.95,
+            "quantity" => 1
+        ];
+
+        $buyTwoGetOneFree = cart()->couponsRepository->addCoupon([
+            "name" => "342",
+            "coupon_type" => CouponTypes::STEP,
+            "discount_quantity" => 1,
+            "discount_step" => 2,
+            "conditional" => true,
+            "conditions" => [
+                "applies_to" => [$cookie["plu"]]
+            ]
+        ]);
+
+        cart()->addProduct($cookie);
+
+        $this->assertEquals(0.95, cart()->getCart()->grand_total);
+
+        cart()->destroy();
+
+        cart()->addProduct(
+            collect($cookie)
+                ->put('quantity', 2)
+                ->toArray()
+        );
+
+
+        $this->assertEquals(0, cart()->getCart()->discount);
+        $this->assertEquals(1.90, cart()->getCart()->grand_total);
+
+
+        cart()->destroy();
+
+        $item = cart()->addProduct(
+            collect($cookie)
+                ->put('quantity', 3)
+                ->toArray()
+        );
+
+        $this->assertEquals(2.85, cart()->getCart()->grand_total);
+
+        cart()->itemsRepository->setCouponCode($item, $buyTwoGetOneFree->name);
+
+        $this->assertEquals(0.95, cart()->getCart()->discount);
+        $this->assertEquals(1.90, cart()->getCart()->grand_total);
     }
 }

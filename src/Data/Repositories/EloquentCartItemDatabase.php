@@ -4,6 +4,7 @@
 namespace juniorE\ShoppingCart\Data\Repositories;
 
 
+use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Data\Interfaces\CartItemDatabase;
 use juniorE\ShoppingCart\Models\CartItem;
 
@@ -26,7 +27,11 @@ class EloquentCartItemDatabase implements CartItemDatabase
 
     public function setCouponCode(CartItem $item, string $code): void
     {
-        // TODO: Implement setCouponCode() method.
+        $item->update([
+            "coupon_code" => $code
+        ]);
+
+        $this->updatePrices($item);
     }
 
     public function setPrice(CartItem $item, float $price): void
@@ -61,5 +66,19 @@ class EloquentCartItemDatabase implements CartItemDatabase
             'additional' => collect($item->additional)
                 ->merge($data)
         ]);
+    }
+
+    private function updatePrices(CartItem $item)
+    {
+        if (!$item->coupon) {
+            return;
+        }
+
+        $discount = $item->coupon->discount($item->price * $item->quantity, $item->quantity, $item->price);
+        $item->update([
+            "discount" => $discount
+        ]);
+
+        app(CartDatabase::class)->updateTotal();
     }
 }

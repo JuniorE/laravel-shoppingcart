@@ -48,4 +48,9 @@ class CartItem extends Model
     {
         return $this->belongsTo(CartItem::class, "parent_id");
     }
+
+    public function coupon()
+    {
+        return $this->hasOne(CartCoupon::class, 'name', 'coupon_code');
+    }
 }

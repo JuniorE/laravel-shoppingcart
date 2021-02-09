@@ -25,6 +25,7 @@ class CreateCartItemsTable extends Migration {
             $table->string('coupon_code')->nullable();
             $table->decimal('price', 12, 4)->default(1);
             $table->decimal('total', 12, 4)->default(1);
+            $table->decimal('discount', 12, 4)->default(0);
             $table->decimal('tax_percent', 12, 4)->default(0)->nullable();
             $table->decimal('tax_amount', 12, 4)->default(0)->nullable();
 

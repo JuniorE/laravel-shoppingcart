@@ -125,9 +125,14 @@ class EloquentCartDatabase implements CartDatabase
     private function totalDiscount(float $total)
     {
         $coupon = cart()->getCart()->coupon;
+
+        $itemDiscounts = cart()->items()->reduce(function($carry, $item) {
+            return $carry + $item->discount;
+        }, 0);
+
         if ($coupon) {
-            return $coupon->discount($total);
+            return $coupon->discount($total) + $itemDiscounts;
         }
-        return 0;
+        return 0 + $itemDiscounts;
     }
 }

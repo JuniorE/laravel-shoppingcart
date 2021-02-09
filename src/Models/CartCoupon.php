@@ -49,7 +49,7 @@ class CartCoupon extends Model
 
     ];
 
-    private function conditionsSatisfied()
+    private function conditionsSatisfied(CartItem $item=null)
     {
         if ($this->conditional) {
             if (isset($this->conditions["cart_contains_plus"])) {
@@ -59,6 +59,9 @@ class CartCoupon extends Model
                     }
                 }
                 return false;
+            }
+            elseif ($item && isset($this->conditions["applies_to"])) {
+                return collect($this->conditions["applies_to"])->contains($item->plu);
             }
         }
 

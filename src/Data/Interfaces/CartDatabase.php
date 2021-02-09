@@ -28,6 +28,8 @@ interface CartDatabase
 
     public function setConversionTime(int $minutes): void;
 
+    public function updateTotal();
+
     public function setAdditionalData(array $data);
 
     public function addCoupon(CartCoupon $coupon): void;

@@ -21,9 +21,7 @@ class CartItemsRepository implements Contracts\CartItemsRepository
 
     public function setCouponCode(CartItem $item, string $code): void
     {
-        $item->update([
-            "coupon_code" => $code
-        ]);
+        $this->getDatabase()->setCouponCode($item, $code);
     }
 
     public function setPrice(CartItem $item, float $price): void
