@@ -11,5 +11,8 @@ return [
         "implementation" => \juniorE\ShoppingCart\Data\Repositories\EloquentCartDatabase::class,
         "ttl" => 30,
 
+    ],
+    "login" => [
+        "userIdColumn" => "id"
     ]
 ];

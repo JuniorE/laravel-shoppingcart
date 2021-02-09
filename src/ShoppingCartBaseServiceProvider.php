@@ -5,6 +5,7 @@ namespace juniorE\ShoppingCart;
 
 
 use Carbon\Laravel\ServiceProvider;
+use Illuminate\Auth\Events\Login;
 use juniorE\ShoppingCart\Data\Interfaces\CartCouponDatabase;
 use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Data\Interfaces\CartItemDatabase;
@@ -15,6 +16,7 @@ use juniorE\ShoppingCart\Data\Repositories\EloquentCartDatabase;
 use juniorE\ShoppingCart\Data\Repositories\EloquentCartItemDatabase;
 use juniorE\ShoppingCart\Data\Repositories\EloquentCartShippingRatesDatabase;
 use juniorE\ShoppingCart\Data\Repositories\EloquentVisitsHistoryDatabase;
+use function Illuminate\Events\queueable;
 
 class ShoppingCartBaseServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,15 @@ class ShoppingCartBaseServiceProvider extends ServiceProvider
     {
         $this->publishResources();
         $this->registerResources();
+
+        \Event::listen(
+            Login::class,
+            queueable(function(Login $event) {
+                cart()->updateIdentifier(
+                    md5($event->user->getAttribute(config('shoppingcart.login.userIdColumn')))
+                );
+            })
+        );
     }
 
     public function register()
