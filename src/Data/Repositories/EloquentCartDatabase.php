@@ -7,6 +7,7 @@ namespace juniorE\ShoppingCart\Data\Repositories;
 use Illuminate\Support\Collection;
 use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Models\Cart;
+use juniorE\ShoppingCart\Models\CartCoupon;
 use juniorE\ShoppingCart\Models\CartItem;
 
 class EloquentCartDatabase implements CartDatabase
@@ -72,6 +73,14 @@ class EloquentCartDatabase implements CartDatabase
         ]);
     }
 
+    public function addCoupon(CartCoupon $coupon): void {
+        cart()->getCart()->update([
+            "coupon_code" => $coupon->name
+        ]);
+
+        $this->updateTotal();
+    }
+
     public function clear(bool $hard=false): void
     {
         if ($hard) {
@@ -103,10 +112,22 @@ class EloquentCartDatabase implements CartDatabase
 
         $taxes = $total - $subtotal;
 
+        $discount = $this->totalDiscount($total);
+
         $cart->update([
-            "grand_total" => $total,
+            "grand_total" => $total - $discount,
             "tax_total" => $taxes,
-            "sub_total" => $subtotal
+            "sub_total" => $subtotal,
+            "discount" => $discount
         ]);
+    }
+
+    private function totalDiscount(float $total)
+    {
+        $coupon = cart()->getCart()->coupon;
+        if ($coupon) {
+            return $coupon->discount($total);
+        }
+        return 0;
     }
 }

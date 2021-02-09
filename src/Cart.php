@@ -41,7 +41,7 @@ class Cart extends BaseCart
 
     public function addCoupon(CartCoupon $coupon): void
     {
-        // TODO: Implement addCoupon() method.
+        app(CartDatabase::class)->addCoupon($coupon);
     }
 
     public function setCheckoutMethod(string $checkoutMethod): void
@@ -93,5 +93,20 @@ class Cart extends BaseCart
             ->sortBy('minimum_cart_price');
 
         return $rates->last();
+    }
+
+    public function contains(array $plus): bool
+    {
+        $items = cart()->items()->map->only("plu")->flatten();
+        $success = true;
+        foreach ($plus as $plu) {
+            if (!$items->contains($plu)) {
+                $success = false;
+                continue;
+            } else {
+                $success = true;
+            }
+        }
+        return $success;
     }
 }

@@ -64,6 +64,11 @@ class Cart extends Model
         return collect();
     }
 
+    public function coupon()
+    {
+        return $this->hasOne(CartCoupon::class, "name", "coupon_code");
+    }
+
     public static function clean(): void
     {
         try {

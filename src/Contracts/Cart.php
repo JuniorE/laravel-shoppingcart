@@ -78,4 +78,6 @@ interface Cart
     public function updateIdentifier(string $identifier): void;
 
     public function getShippingRate(): CartShippingRate;
+
+    public function contains(array $plus): bool;
 }

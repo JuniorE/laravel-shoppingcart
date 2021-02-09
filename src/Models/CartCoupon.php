@@ -6,6 +6,7 @@ namespace juniorE\ShoppingCart\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use juniorE\ShoppingCart\Enums\CouponTypes;
 
 /**
  * Class CartCoupon
@@ -38,11 +39,51 @@ class CartCoupon extends Model
     protected $guarded = [];
 
     protected $casts = [
+        "conditional" => "boolean",
         "additional" => "array",
+        "conditions" => "array",
         "starts_from" => "datetime",
         "ends_till" => "datetime",
         "updated_at" => "datetime",
         "created_at" => "datetime",
 
     ];
+
+    private function conditionsSatisfied()
+    {
+        if ($this->conditional) {
+            if (isset($this->conditions["cart_contains_plus"])) {
+                foreach($this->conditions["cart_contains_plus"] as $plus) {
+                    if(cart()->contains($plus)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function discount(float $price, int $quantity=0, float $productPrice=0.0)
+    {
+        if (!$this->conditionsSatisfied()) {
+            return 0;
+        }
+
+        switch ($this->coupon_type) {
+            case CouponTypes::AMOUNT:
+                return $this->discount_amount;
+            case CouponTypes::PERCENT:
+                return $price * $this->discount_percent;
+            case CouponTypes::STEP:
+                $freeUnits = 0;
+                while ($quantity > $this->discount_step) {
+                    $quantity -= $this->discount_step;
+                    $freeUnits++;
+                }
+                return $freeUnits * $productPrice;
+        }
+        return 0;
+    }
 }

@@ -4,6 +4,7 @@
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use juniorE\ShoppingCart\Cart;
 use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
+use juniorE\ShoppingCart\Enums\CouponTypes;
 use juniorE\ShoppingCart\Tests\TestCase;
 use juniorE\ShoppingCart\Models as Models;
 
@@ -332,5 +333,96 @@ class CartTest extends TestCase
         ]);
 
         $this->assertEquals($truck3->price, cart()->getShippingRate()->price);
+    }
+
+    /**
+     * @test
+     */
+    public function can_add_coupon_and_is_coupon_applied_correctly(){
+        $frappucino = [
+            "plu" => 5,
+            "price" => 49.99,
+            "quantity" => 1
+        ];
+
+        $machiato = [
+            "plu" => 7,
+            "price" => 12.99,
+            "quantity" => 1
+        ];
+
+        $espresso = [
+            "plu" => 3,
+            "price" => 4.95,
+            "quantity" => 1
+        ];
+
+        $cookie = [
+            "plu" => 9,
+            "price" => 0.95,
+            "quantity" => 1
+        ];
+
+        // The Mocha Cookie Crumble Frappcino Starbucks didn't give me.
+        cart()->addProduct($frappucino);
+
+        $this->assertEquals(49.99, cart()->getCart()->grand_total);
+
+        $welcome125 = cart()->couponsRepository->addCoupon([
+            "name" => "WELCOME125",
+            "coupon_type" => CouponTypes::PERCENT,
+            "discount_percent" => 0.125
+        ]);
+
+        $freeCookies = cart()->couponsRepository->addCoupon([
+            "name" => "FREECOOKIE",
+            "coupon_type" => CouponTypes::AMOUNT,
+            "discount_amount" => 0.95,
+            "conditional" => true,
+            "conditions" => collect([
+                "cart_contains_plus" => [
+                    [$frappucino["plu"]],
+                    [$machiato["plu"], $espresso["plu"]]
+                ]
+            ])
+        ]);
+
+        cart()->addCoupon($welcome125);
+        $this->assertCount(2, Models\CartCoupon::all());
+        $this->assertEquals($welcome125->name, cart()->getCart()->coupon_code);
+
+        $this->assertEquals(43.74, round(cart()->getCart()->grand_total, 2));
+
+        cart()->destroy();
+
+        cart()->addProduct($frappucino);
+
+        $this->assertEquals($frappucino["price"], cart()->getCart()->grand_total);
+
+        cart()->addProduct($cookie);
+
+        $this->assertEquals($frappucino["price"] + $cookie["price"], cart()->getCart()->grand_total);
+
+        cart()->addCoupon($freeCookies);
+
+        $this->assertEquals($frappucino["price"], cart()->getCart()->grand_total);
+
+        cart()->destroy();
+
+        cart()->addProduct($machiato);
+
+        $this->assertEquals($machiato["price"], cart()->getCart()->grand_total);
+
+        cart()->addProduct($cookie);
+
+        $this->assertEquals($machiato["price"] + $cookie["price"], cart()->getCart()->grand_total);
+
+        cart()->addCoupon($freeCookies);
+
+        $this->assertEquals($machiato["price"] + $cookie["price"], cart()->getCart()->grand_total);
+
+        cart()->addProduct($espresso);
+
+        $this->assertEquals($espresso["price"] + $machiato["price"], cart()->getCart()->grand_total);
     }
 }

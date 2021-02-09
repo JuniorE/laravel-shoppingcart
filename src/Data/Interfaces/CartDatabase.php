@@ -5,6 +5,7 @@ namespace juniorE\ShoppingCart\Data\Interfaces;
 
 use Illuminate\Support\Collection;
 use \juniorE\ShoppingCart\Models\Cart;
+use juniorE\ShoppingCart\Models\CartCoupon;
 use juniorE\ShoppingCart\Models\CartItem;
 
 interface CartDatabase
@@ -28,6 +29,8 @@ interface CartDatabase
     public function setConversionTime(int $minutes): void;
 
     public function setAdditionalData(array $data);
+
+    public function addCoupon(CartCoupon $coupon): void;
 
     public function clear(bool $hard=false): void;
 }
