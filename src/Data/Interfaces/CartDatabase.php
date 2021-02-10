@@ -12,7 +12,11 @@ interface CartDatabase
 {
     public function createCart(string $identifier): Cart;
 
-    public function getCart(string $identifier): Cart;
+    /**
+     * @param string $identifier
+     * @return Cart|null
+     */
+    public function getCart(string $identifier);
 
     public function createCartItem(array $product): CartItem;
 

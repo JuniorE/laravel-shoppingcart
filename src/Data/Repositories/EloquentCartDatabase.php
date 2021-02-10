@@ -19,7 +19,11 @@ class EloquentCartDatabase implements CartDatabase
         ]);
     }
 
-    public function getCart(string $identifier): Cart
+    /**
+     * @param string $identifier
+     * @return Cart|null
+     */
+    public function getCart(string $identifier)
     {
         return Cart::where('identifier', "=", $identifier)->first();
     }

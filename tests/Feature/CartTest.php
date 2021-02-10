@@ -483,4 +483,27 @@ class CartTest extends TestCase
         $this->assertEquals(0.95, cart()->getCart()->discount);
         $this->assertEquals(1.90, cart()->getCart()->grand_total);
     }
+
+    /**
+     * @test
+     */
+    public function does_throw_null_pointer_exception_when_cart_gets_cleaned(){
+        cart()->addProduct([
+            "plu" => 5
+        ]);
+
+        cart()->getCart()->update([
+            "updated_at" => now()->subDays(40)
+        ]);
+
+        $id = cart()->identifier;
+
+        Models\Cart::clean();
+
+        cart()->addProduct([
+            "plu" => 5
+        ]);
+        $this->assertCount(1, cart()->items());
+        $this->assertNotEquals($id, cart()->identifier);
+    }
 }
