@@ -16,8 +16,8 @@ class CreateCartShippingRatesTable extends Migration {
             $table->increments('id');
             $table->string('method');
             $table->string('method_description')->nullable();
-            $table->decimal('price', 4, 12);
-            $table->decimal('minimum_cart_price', 4, 12)->default(0);
+            $table->decimal('price', 12, 4);
+            $table->decimal('minimum_cart_price', 12, 4)->default(0);
             $table->timestamps();
         });
     }
