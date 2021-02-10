@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddCouponCodeRelationToCarts extends Migration {
+class AddCouponCodeRelationToCartsTable extends Migration {
     /**
      * Run the migration
      *

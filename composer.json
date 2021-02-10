@@ -1,5 +1,6 @@
 {
-    "name": "juniore/shoppingcart",
+    "name": "juniore/laravel-shoppingcart",
+    "version": "1.0.1",
     "description": "Laravel shopping cart",
     "license": "MIT",
     "require": {

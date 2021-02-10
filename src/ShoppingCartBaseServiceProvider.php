@@ -24,15 +24,6 @@ class ShoppingCartBaseServiceProvider extends ServiceProvider
     {
         $this->publishResources();
         $this->registerResources();
-
-        \Event::listen(
-            Login::class,
-            queueable(function(Login $event) {
-                cart()->updateIdentifier(
-                    md5($event->user->getAttribute(config('shoppingcart.login.userIdColumn')))
-                );
-            })
-        );
     }
 
     public function register()
