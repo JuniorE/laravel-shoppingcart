@@ -506,4 +506,33 @@ class CartTest extends TestCase
         $this->assertCount(1, cart()->items());
         $this->assertNotEquals($id, cart()->identifier);
     }
+
+    /**
+     * @test
+     */
+    public function can_restore_cart(){
+        $cart = new Cart();
+        $cart->addProduct([
+            "plu" => 4
+        ]);
+
+        $this->assertCount(1, Models\Cart::all());
+
+        $this->assertCount(1, cart()->items());
+        $this->assertEquals($cart->identifier, cart()->identifier);
+
+        $oldIdentifier = cart()->identifier;
+
+        session()->forget('cart_identifier');
+
+        $this->assertNotEquals($cart->identifier, cart()->identifier);
+
+        $this->assertCount(0, cart()->items());
+
+        $this->assertNotNull(Models\Cart::where('identifier', '=', $cart->identifier)->first());
+
+        $this->assertEquals($oldIdentifier, cart($oldIdentifier)->identifier);
+
+        $this->assertEquals(4, cart()->items()->first()->plu);
+    }
 }

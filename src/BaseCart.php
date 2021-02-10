@@ -57,9 +57,7 @@ abstract class BaseCart implements Contracts\Cart
      */
     public function __construct(string $identifier=null)
     {
-        if (!$identifier) {
-            $this->restoreOrCreateIdentifier();
-        }
+        $this->restoreOrCreateIdentifier($identifier);
 
         $this->itemsRepository = new CartItemsRepository();
         $this->couponsRepository = new CartCouponRepository();
@@ -76,11 +74,17 @@ abstract class BaseCart implements Contracts\Cart
 
     /**
      * Restore or Create the cart using the Session Identifier
+     *
+     * @param string|null $identifier
+     *
      * @return string
      */
-    public function restoreOrCreateIdentifier()
+    public function restoreOrCreateIdentifier(?string $identifier=null)
     {
-        if (session(self::SESSION_CART_IDENTIFIER)) {
+        if ($identifier) {
+            return $this->restore($identifier);
+        }
+        elseif (session(self::SESSION_CART_IDENTIFIER)) {
             return $this->restore(session(self::SESSION_CART_IDENTIFIER));
         }
 
