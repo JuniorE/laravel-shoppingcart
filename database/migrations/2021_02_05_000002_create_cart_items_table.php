@@ -32,11 +32,13 @@ class CreateCartItemsTable extends Migration {
 
             $table->json('additional')->nullable();
 
+            $table->timestamps();
+        });
+
+        Schema::table('cart_items', function(Blueprint $table) {
             $table->foreign('cart_id')->references('id')->on('cart')->onDelete('cascade');
             $table->foreign('parent_id')->references('id')->on('cart_items')->onDelete('cascade');
             $table->foreign('coupon_code')->references('name')->on('cart_coupons')->onDelete('cascade');
-
-            $table->timestamps();
         });
     }
 
