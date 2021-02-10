@@ -14,9 +14,11 @@ class CreateCartItemsTable extends Migration {
     {
         Schema::create('cart_items', function(Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->increments('id');
-            $table->integer('cart_id')->unsigned();
-            $table->integer('parent_id')->unsigned()->nullable();
+            $table->bigIncrements('id');
+            $table->foreignId('cart_id')->constrained()->onDelete("cascade");
+            $table->foreignId('parent_id')->nullable()->constrained('cart_items')->onDelete("cascade");
+//            $table->integer('cart_id')->unsigned();
+//            $table->integer('parent_id')->unsigned()->nullable();
             $table->unsignedInteger('quantity')->default(0);
             $table->string('plu');
             $table->integer('type')->default(1);
@@ -35,11 +37,11 @@ class CreateCartItemsTable extends Migration {
             $table->timestamps();
         });
 
-        Schema::table('cart_items', function(Blueprint $table) {
-            $table->foreign('cart_id')->references('id')->on('cart')->onDelete('cascade');
-            $table->foreign('parent_id')->references('id')->on('cart_items')->onDelete('cascade');
-            $table->foreign('coupon_code')->references('name')->on('cart_coupons')->onDelete('cascade');
-        });
+//        Schema::table('cart_items', function(Blueprint $table) {
+//            $table->foreign('cart_id')->references('id')->on('cart')->onDelete('cascade');
+//            $table->foreign('parent_id')->references('id')->on('cart_items')->onDelete('cascade');
+//            $table->foreign('coupon_code')->references('name')->on('cart_coupons')->onDelete('cascade');
+//        });
     }
 
     /**

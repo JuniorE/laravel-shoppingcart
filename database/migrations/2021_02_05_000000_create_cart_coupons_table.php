@@ -15,7 +15,7 @@ class CreateCartCouponsTable extends Migration {
         Schema::create('cart_coupons', function(Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('description')->nullable();
             $table->boolean('status')->default(false);
             $table->integer('coupon_type')->default(0);
