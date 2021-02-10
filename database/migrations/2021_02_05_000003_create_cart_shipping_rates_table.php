@@ -13,6 +13,7 @@ class CreateCartShippingRatesTable extends Migration {
     public function up()
     {
         Schema::create('cart_shipping_rates', function(Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('method');
             $table->string('method_description')->nullable();

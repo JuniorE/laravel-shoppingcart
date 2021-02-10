@@ -13,6 +13,7 @@ class CreateCartCouponsTable extends Migration {
     public function up()
     {
         Schema::create('cart_coupons', function(Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('name');
             $table->string('description')->nullable();

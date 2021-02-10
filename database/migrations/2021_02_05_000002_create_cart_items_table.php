@@ -13,9 +13,10 @@ class CreateCartItemsTable extends Migration {
     public function up()
     {
         Schema::create('cart_items', function(Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('cart_id');
-            $table->integer('parent_id')->nullable();
+            $table->integer('cart_id')->unsigned();
+            $table->integer('parent_id')->unsigned()->nullable();
             $table->unsignedInteger('quantity')->default(0);
             $table->string('plu');
             $table->integer('type')->default(1);

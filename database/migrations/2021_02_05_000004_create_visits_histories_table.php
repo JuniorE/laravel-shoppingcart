@@ -13,6 +13,7 @@ class CreateVisitsHistoriesTable extends Migration {
     public function up()
     {
         Schema::create('visits_histories', function(Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer("cart_id");
             $table->json("visits");

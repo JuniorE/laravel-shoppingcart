@@ -13,6 +13,7 @@ class CreateCartsTable extends Migration {
     public function up()
     {
         Schema::create('carts', function(Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('identifier')->unique();
             $table->string('shipping_method')->nullable();
