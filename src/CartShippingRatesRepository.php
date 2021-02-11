@@ -43,4 +43,9 @@ class CartShippingRatesRepository implements Contracts\CartShippingRatesReposito
     {
         app(CartShippingRatesDatabase::class)->setMinimumCartPrice($rate, $price);
     }
+
+    public function removeShippingRate(CartShippingRate $rate): void
+    {
+        app(CartShippingRatesDatabase::class)->removeShippingRate($rate);
+    }
 }

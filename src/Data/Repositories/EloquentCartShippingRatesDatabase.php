@@ -47,4 +47,9 @@ class EloquentCartShippingRatesDatabase implements CartShippingRatesDatabase
     {
         return CartShippingRate::where("method", $method)->get();
     }
+
+    public function removeShippingRate(CartShippingRate $rate): void
+    {
+        $rate->delete();
+    }
 }

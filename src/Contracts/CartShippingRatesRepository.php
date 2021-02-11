@@ -24,4 +24,6 @@ interface CartShippingRatesRepository
     public function setPrice(CartShippingRate $rate, float $price): void;
 
     public function setMinimumCartPrice(CartShippingRate $rate, float $price): void;
+
+    public function removeShippingRate(CartShippingRate $rate): void;
 }

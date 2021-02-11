@@ -6,6 +6,9 @@ namespace juniorE\ShoppingCart\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use juniorE\ShoppingCart\Events\CartShippingRate\CartShippingRateCreatedEvent;
+use juniorE\ShoppingCart\Events\CartShippingRate\CartShippingRateDeletedEvent;
+use juniorE\ShoppingCart\Events\CartShippingRate\CartShippingRateUpdatedEvent;
 
 /**
  * Class CartShippingRate
@@ -29,4 +32,21 @@ class CartShippingRate extends Model
         "created_at" => "datetime",
 
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updated(function(CartShippingRate $model) {
+            event(new CartShippingRateUpdatedEvent($model));
+        });
+
+        static::created(function(CartShippingRate $model) {
+            event(new CartShippingRateCreatedEvent($model));
+        });
+
+        static::deleted(function(CartShippingRate $model) {
+            event(new CartShippingRateDeletedEvent($model));
+        });
+    }
 }
