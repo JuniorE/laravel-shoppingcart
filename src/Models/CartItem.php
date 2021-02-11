@@ -6,6 +6,9 @@ namespace juniorE\ShoppingCart\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use juniorE\ShoppingCart\Events\CartItems\CartItemCreatedEvent;
+use juniorE\ShoppingCart\Events\CartItems\CartItemDeletedEvent;
+use juniorE\ShoppingCart\Events\CartItems\CartItemUpdatedEvent;
 
 /**
  * Class CartItem
@@ -84,6 +87,18 @@ class CartItem extends Model
     protected static function boot()
     {
         parent::boot();
+
+        static::updated(function(CartItem $model) {
+            event(new CartItemUpdatedEvent($model));
+        });
+
+        static::created(function(CartItem $model) {
+            event(new CartItemCreatedEvent($model));
+        });
+
+        static::deleted(function(CartItem $model) {
+            event(new CartItemDeletedEvent($model));
+        });
 
         static::creating(function(CartItem $model) {
             $model->updateHash();
