@@ -316,4 +316,26 @@ class CartCouponsTest extends TestCase
 
         $this->assertEquals(false, $coupon->apply_to_shipping);
     }
+
+    /**
+     * @test
+     */
+    public function can_delete_coupons(){
+        $welcome = cart()->couponsRepository->addCoupon([
+            "name" => "WELCOME10",
+            "discount_percent" => 0.10
+        ]);
+
+        $neighbors = cart()->couponsRepository->addCoupon([
+            "name" => "GOEDE BUREN",
+            "discount_percent" => 1
+        ]);
+
+        $this->assertCount(2, CartCoupon::all());
+
+        cart()->couponsRepository->removeCoupon($welcome);
+        cart()->couponsRepository->removeCoupon($neighbors);
+
+        $this->assertCount(0, CartCoupon::all());
+    }
 }
