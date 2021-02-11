@@ -34,6 +34,9 @@ class CartItem extends Model
     protected $guarded = [];
 
     protected $casts = [
+        "price" => "float",
+        "cart_id" => "int",
+        "plu" => "int",
         "additional" => "array",
         "updated_at" => "datetime",
         "created_at" => "datetime",
@@ -70,11 +73,10 @@ class CartItem extends Model
         return sha1(
             collect($this->attributes)
                 ->only([
-                    'cart_id',
-                    'plu',
-                    'additional',
-                    'price'
+                    'additional'
                 ])
+                ->put('cart_id', (int) $this->cart_id)
+                ->put('plu', (int) $this->plu)
                 ->toJson()
         );
     }

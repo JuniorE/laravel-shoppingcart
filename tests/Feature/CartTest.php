@@ -615,6 +615,11 @@ class CartTest extends TestCase
         $this->assertCount(2, $cart->items());
         $this->assertEquals(8, $cartProduct->quantity);
 
+        $cartProduct = $cart->addProduct($product2);
+
+        $this->assertCount(2, $cart->items());
+        $this->assertEquals(10, $cartProduct->quantity);
+
         $cart->addProduct($product4);
 
         $this->assertCount(3, $cart->items());

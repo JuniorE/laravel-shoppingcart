@@ -120,13 +120,13 @@ class CartItemTest extends TestCase
         $product = cart()->addProduct([
             "plu" => 5,
             "tax_percent" => 0.21
-        ]);
+        ], true);
 
         $product2 = cart()->addProduct([
             "plu" => 5,
             "tax_percent" => 0.21,
             "price" => 10
-        ]);
+        ], true);
 
         $this->assertEquals(0, $product->tax_amount);
         $this->assertEquals(2.10, $product2->tax_amount);
