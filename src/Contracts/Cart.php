@@ -15,9 +15,10 @@ interface Cart
      * Add a product to the cart
      *
      * @param array $product
+     * @param bool $forceNewLine
      * @return CartItem
      */
-    public function addProduct(array $product): CartItem;
+    public function addProduct(array $product, bool $forceNewLine=false): CartItem;
 
     /**
      * Remove a cart item from the cart

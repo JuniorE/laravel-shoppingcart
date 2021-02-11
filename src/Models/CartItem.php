@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $cart_id
  * @property int|null $parent_id
+ * @property string row_hash
  * @property int $quantity
  * @property string $plu
  * @property int $type
@@ -52,5 +53,46 @@ class CartItem extends Model
     public function coupon()
     {
         return $this->hasOne(CartCoupon::class, 'name', 'coupon_code');
+    }
+
+    public function updateHash()
+    {
+        $this->row_hash = $this->getRowHash();
+    }
+
+    public static function getHash($attributes)
+    {
+        return (new static($attributes))->getRowHash();
+    }
+
+    public function getRowHash()
+    {
+        return sha1(
+            collect($this->attributes)
+                ->only([
+                    'cart_id',
+                    'plu',
+                    'additional',
+                    'price'
+                ])
+                ->toJson()
+        );
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function(CartItem $model) {
+            $model->updateHash();
+        });
+
+        static::saving(function(CartItem $model) {
+            $model->updateHash();
+        });
+
+        static::updating(function(CartItem $model) {
+            $model->updateHash();
+        });
     }
 }

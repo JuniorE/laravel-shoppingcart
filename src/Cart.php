@@ -13,21 +13,22 @@ use juniorE\ShoppingCart\Models\CartShippingRate;
 
 class Cart extends BaseCart
 {
-    public function addProduct(array $product): CartItem
+    public function addProduct(array $product, bool $forceNewLine=false): CartItem
     {
-        $cartItem = app(CartDatabase::class)->createCartItem(
-            collect($product)
-                ->merge(["cart_id" => $this->id])
-                ->toArray()
-        );
+        $product = collect($product)
+            ->merge(["cart_id" => $this->id])
+            ->toArray();
 
-        $this->cartItems->push($cartItem);
-        return $cartItem;
+        if ($forceNewLine) {
+            return $this->createCartItem($product);
+        }
+
+        return $this->updateOrCreateCartItem($product);
     }
 
     public function removeItem(CartItem $item): void
     {
-        $this->cartItems->filter(function($cartItem) use ($item) {
+        $this->cartItems->filter(function ($cartItem) use ($item) {
             return $cartItem->id !== $item->id;
         });
 
@@ -108,5 +109,39 @@ class Cart extends BaseCart
             }
         }
         return $success;
+    }
+
+    private function updateOrCreateCartItem(array $product): CartItem
+    {
+        $database = app(CartDatabase::class);
+
+        $hash = CartItem::getHash($product);
+
+        $existingCartItem = $database->getCartItemByHash($hash);
+
+        if ($existingCartItem) {
+            return $this->updateQuantity($existingCartItem, $existingCartItem->quantity + ($product["quantity"] ?? 0));
+        } else {
+            return $this->createCartItem($product);
+        }
+    }
+
+    private function updateQuantity(CartItem $item, $quantity): CartItem
+    {
+        $this->itemsRepository->setQuantity($item, $quantity);
+
+        $this->cartItems = $this->getCart()->items;
+
+        return $item;
+    }
+
+    private function createCartItem(array $product): CartItem
+    {
+        $database = app(CartDatabase::class);
+
+        $cartItem = $database->createCartItem($product);
+        $this->cartItems->push($cartItem);
+
+        return $cartItem;
     }
 }

@@ -27,6 +27,12 @@ interface CartDatabase
     public function getCartItem(int $id);
 
     /**
+     * @param string $hash
+     * @return CartItem|null
+     */
+    public function getCartItemByHash(string $hash);
+
+    /**
      * @param int|null $cartIdentifier
      * @return Collection|CartItem[]
      */

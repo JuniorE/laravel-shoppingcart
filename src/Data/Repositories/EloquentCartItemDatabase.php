@@ -10,6 +10,13 @@ use juniorE\ShoppingCart\Models\CartItem;
 
 class EloquentCartItemDatabase implements CartItemDatabase
 {
+    public function setQuantity(CartItem $item, int $quantity): void
+    {
+        $item->update([
+            'quantity' => $quantity
+        ]);
+    }
+
     public function setParentCartItem(CartItem $item, int $parentId): void
     {
         $item->update([

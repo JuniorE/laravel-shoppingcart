@@ -554,4 +554,81 @@ class CartTest extends TestCase
         $this->assertNotNull($cart->getItem($item->id));
         $this->assertEquals(5, $item->plu);
     }
+
+    /**
+     * @test
+     */
+    public function auto_merge_products_if_possible(){
+        $product = [
+            "plu" => 6,
+            "quantity" => 2,
+            "additional" => [
+                "comment" => "abc"
+            ]
+        ];
+
+        $product2 = [
+            "plu" => 6,
+            "quantity" => 2,
+            "additional" => [
+                "comment" => "def"
+            ]
+        ];
+
+        $product3 = [
+            "plu" => 6,
+            "quantity" => 6,
+            "additional" => [
+                "comment" => "def"
+            ]
+        ];
+
+        $product4 = [
+            "plu" => 6,
+            "quantity" => 3
+        ];
+
+        $product5 = [
+            "plu" => 7,
+            "quantity" => 1
+        ];
+
+        $product6 = [
+            "plu" => 6,
+            "quantity" => 1,
+            "additional" => [
+                "comment" => "abc"
+            ]
+        ];
+
+        $cart = cart();
+        $cart->addProduct($product);
+
+        $this->assertCount(1, $cart->items());
+
+        $cart->addProduct($product2);
+
+        $this->assertCount(2, $cart->items());
+
+        $cartProduct = $cart->addProduct($product3);
+
+        $this->assertCount(2, $cart->items());
+        $this->assertEquals(8, $cartProduct->quantity);
+
+        $cart->addProduct($product4);
+
+        $this->assertCount(3, $cart->items());
+
+        $cart->addProduct($product5);
+
+        $this->assertCount(4, $cart->items());
+
+        $productAbc = $cart->addProduct($product6);
+
+        $this->assertCount(4, $cart->items());
+        $this->assertEquals(3, $productAbc->quantity);
+
+        $cart->addProduct($product6, true);
+        $this->assertCount(5, $cart->items());
+    }
 }

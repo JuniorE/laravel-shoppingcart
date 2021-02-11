@@ -9,6 +9,10 @@ use juniorE\ShoppingCart\Models\CartItem;
 
 class CartItemsRepository implements Contracts\CartItemsRepository
 {
+    public function setQuantity(CartItem $item, int $quantity): void {
+        $this->getDatabase()->setQuantity($item, $quantity);
+    }
+
     public function setParentCartItem(CartItem $item, int $parentId): void
     {
         $this->getDatabase()->setParentCartItem($item, $parentId);

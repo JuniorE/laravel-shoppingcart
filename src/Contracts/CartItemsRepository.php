@@ -10,6 +10,12 @@ interface CartItemsRepository
 {
     /**
      * @param CartItem $item
+     * @param int $quantity
+     */
+    public function setQuantity(CartItem $item, int $quantity): void;
+
+    /**
+     * @param CartItem $item
      * @param int $parentId
      */
     public function setParentCartItem(CartItem $item, int $parentId): void;

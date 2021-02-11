@@ -51,6 +51,15 @@ class EloquentCartDatabase implements CartDatabase
     }
 
     /**
+     * @param string $hash
+     * @return CartItem|null
+     */
+    public function getCartItemByHash(string $hash)
+    {
+        return CartItem::firstWhere('row_hash', $hash);
+    }
+
+    /**
      * @param int|null $cartIdentifier
      * @return Collection|CartItem[]
      */
