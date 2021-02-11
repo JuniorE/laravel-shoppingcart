@@ -73,6 +73,18 @@ interface Cart
      */
     public function destroy(): void;
 
+    /**
+     * @param int $id
+     * @return CartItem|null
+     */
+    public function getItem(int $id);
+
+    /**
+     * @param int $cartId
+     * @return Collection|CartItem[]
+     */
+    public function getItems(int $cartId);
+
     public function markVisited(string $plu): void;
 
     public function updateIdentifier(string $identifier): void;

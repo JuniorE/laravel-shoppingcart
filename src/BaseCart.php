@@ -137,4 +137,14 @@ abstract class BaseCart implements Contracts\Cart
     {
         return Hash::make(now()->toISOString());
     }
+
+    public function getItem(int $id)
+    {
+        return app(CartDatabase::class)->getCartItem($id);
+    }
+
+    public function getItems(int $cartId=null)
+    {
+        return app(CartDatabase::class)->getCartItems($cartId);
+    }
 }

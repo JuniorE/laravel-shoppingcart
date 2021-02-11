@@ -51,12 +51,12 @@ class EloquentCartDatabase implements CartDatabase
     }
 
     /**
-     * @param int $cartIdentifier
+     * @param int|null $cartIdentifier
      * @return Collection|CartItem[]
      */
-    public function getCartItems(int $cartIdentifier)
+    public function getCartItems(int $cartIdentifier=null)
     {
-        return CartItem::where('cart_id', cart()->id)->get();
+        return CartItem::where('cart_id', $cartIdentifier ?: cart()->id)->get();
     }
 
     public function removeCartItem(CartItem $item): void

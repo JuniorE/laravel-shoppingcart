@@ -27,10 +27,10 @@ interface CartDatabase
     public function getCartItem(int $id);
 
     /**
-     * @param int $cartIdentifier
+     * @param int|null $cartIdentifier
      * @return Collection|CartItem[]
      */
-    public function getCartItems(int $cartIdentifier);
+    public function getCartItems(int $cartIdentifier=null);
 
     public function removeCartItem(CartItem $item): void;
 

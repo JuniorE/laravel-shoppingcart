@@ -535,4 +535,23 @@ class CartTest extends TestCase
 
         $this->assertEquals(4, cart()->items()->first()->plu);
     }
+
+    public function can_get_cart_item_and_items_through_cart_helper()
+    {
+        $cart = cart();
+
+        $this->assertNull($cart->getItem(1));
+        $this->assertCount(0, $cart->getItems($cart->id));
+        $this->assertCount(0, $cart->getItems());
+
+        $item = $cart->addProduct([
+            "plu" => 5
+        ]);
+
+        $this->assertCount(1, $cart->getItems($cart->id));
+        $this->assertCount(1, $cart->getItems());
+
+        $this->assertNotNull($cart->getItem($item->id));
+        $this->assertEquals(5, $item->plu);
+    }
 }
