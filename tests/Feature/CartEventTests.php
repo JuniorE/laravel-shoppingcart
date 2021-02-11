@@ -2,9 +2,13 @@
 
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use juniorE\ShoppingCart\Enums\CouponTypes;
 use juniorE\ShoppingCart\Events\Cart\CartCreatedEvent;
 use juniorE\ShoppingCart\Events\Cart\CartDeletedEvent;
 use juniorE\ShoppingCart\Events\Cart\CartUpdatedEvent;
+use juniorE\ShoppingCart\Events\CartCoupon\CartCouponCreatedEvent;
+use juniorE\ShoppingCart\Events\CartCoupon\CartCouponDeletedEvent;
+use juniorE\ShoppingCart\Events\CartCoupon\CartCouponUpdatedEvent;
 use juniorE\ShoppingCart\Events\CartItems\CartItemCreatedEvent;
 use juniorE\ShoppingCart\Events\CartItems\CartItemDeletedEvent;
 use juniorE\ShoppingCart\Events\CartItems\CartItemUpdatedEvent;
@@ -90,5 +94,32 @@ class CartEventTests extends TestCase
         cart()->shippingRateRepository->removeShippingRate($truck);
 
         Event::assertDispatchedTimes(CartShippingRateDeletedEvent::class, 1);
+    }
+    
+    /**
+     * @test
+     */
+    public function cart_coupon_events(){
+        Event::fake([
+            CartCouponCreatedEvent::class,
+            CartCouponUpdatedEvent::class,
+            CartCouponDeletedEvent::class
+        ]);
+
+        $coupon = cart()->couponsRepository->addCoupon([
+            "name" => "WELCOME10",
+            "coupon_type" => CouponTypes::PERCENT,
+            "discount_percent" => 0.10
+        ]);
+
+        Event::assertDispatchedTimes(CartCouponCreatedEvent::class, 1);
+
+        cart()->couponsRepository->setFreeShipping($coupon, true);
+
+        Event::assertDispatchedTimes(CartCouponUpdatedEvent::class, 1);
+
+        cart()->couponsRepository->removeCoupon($coupon);
+
+        Event::assertDispatchedTimes(CartCouponDeletedEvent::class, 1);
     }
 }

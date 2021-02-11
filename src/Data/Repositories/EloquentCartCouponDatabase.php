@@ -158,4 +158,9 @@ class EloquentCartCouponDatabase implements CartCouponDatabase
             "free_shipping" => $freeShipping
         ]);
     }
+
+    public function removeCoupon(CartCoupon $coupon): void
+    {
+        $coupon->delete();
+    }
 }

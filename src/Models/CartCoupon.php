@@ -7,6 +7,9 @@ namespace juniorE\ShoppingCart\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use juniorE\ShoppingCart\Enums\CouponTypes;
+use juniorE\ShoppingCart\Events\CartCoupon\CartCouponCreatedEvent;
+use juniorE\ShoppingCart\Events\CartCoupon\CartCouponDeletedEvent;
+use juniorE\ShoppingCart\Events\CartCoupon\CartCouponUpdatedEvent;
 
 /**
  * Class CartCoupon
@@ -88,5 +91,22 @@ class CartCoupon extends Model
                 return $freeUnits * $productPrice;
         }
         return 0;
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updated(function(CartCoupon $model) {
+            event(new CartCouponUpdatedEvent($model));
+        });
+
+        static::created(function(CartCoupon $model) {
+            event(new CartCouponCreatedEvent($model));
+        });
+
+        static::deleted(function(CartCoupon $model) {
+            event(new CartCouponDeletedEvent($model));
+        });
     }
 }

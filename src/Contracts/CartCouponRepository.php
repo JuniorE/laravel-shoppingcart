@@ -46,4 +46,6 @@ interface CartCouponRepository
     public function setAppliesToShipping(CartCoupon $coupon, bool $applies): void;
 
     public function setFreeShipping(CartCoupon $coupon, bool $freeShipping): void;
+
+    public function removeCoupon(CartCoupon $coupon): void;
 }

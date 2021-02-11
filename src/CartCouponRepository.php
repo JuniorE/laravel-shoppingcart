@@ -105,4 +105,9 @@ class CartCouponRepository implements Contracts\CartCouponRepository
     {
         app(CartCouponDatabase::class)->setFreeShipping($coupon, $freeShipping);
     }
+
+    public function removeCoupon(CartCoupon $coupon): void
+    {
+        app(CartCouponDatabase::class)->removeCoupon($coupon);
+    }
 }
