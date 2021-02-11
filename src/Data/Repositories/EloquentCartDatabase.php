@@ -41,12 +41,20 @@ class EloquentCartDatabase implements CartDatabase
         return $cartItem;
     }
 
-    public function getCartItem(int $id): CartItem
+    /**
+     * @param int $id
+     * @return CartItem|null
+     */
+    public function getCartItem(int $id)
     {
         return CartItem::find($id);
     }
 
-    public function getCartItems(int $cartIdentifier): Collection
+    /**
+     * @param int $cartIdentifier
+     * @return Collection|CartItem[]
+     */
+    public function getCartItems(int $cartIdentifier)
     {
         return CartItem::where('cart_id', cart()->id)->get();
     }

@@ -20,9 +20,17 @@ interface CartDatabase
 
     public function createCartItem(array $product): CartItem;
 
-    public function getCartItem(int $id): CartItem;
+    /**
+     * @param int $id
+     * @return CartItem|null
+     */
+    public function getCartItem(int $id);
 
-    public function getCartItems(int $cartIdentifier): Collection;
+    /**
+     * @param int $cartIdentifier
+     * @return Collection|CartItem[]
+     */
+    public function getCartItems(int $cartIdentifier);
 
     public function removeCartItem(CartItem $item): void;
 

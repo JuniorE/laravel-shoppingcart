@@ -2,6 +2,7 @@
 
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Models\CartItem;
 use juniorE\ShoppingCart\Tests\TestCase;
 
@@ -160,5 +161,23 @@ class CartItemTest extends TestCase
         cart()->itemsRepository->setPLU($product, "");
 
         $this->assertEquals(10, $product->plu);
+    }
+
+    /**
+     * @test
+     */
+    public function does_not_throw_errors_when_cart_item_doesnt_exist(){
+        try {
+            $this->assertCount(0, CartItem::all());
+            $this->assertNull(app(CartDatabase::class)->getCartItem(1));
+            $item = cart()->addProduct([
+                "plu" => 5
+            ]);
+            $dbItem = app(CartDatabase::class)->getCartItem($item->id);
+            $this->assertNotNull($dbItem);
+            $this->assertEquals($item->plu, $dbItem->plu);
+        } catch (\Exception $ex) {
+            $this->assertTrue(false);
+        }
     }
 }
