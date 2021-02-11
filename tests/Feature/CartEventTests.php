@@ -2,6 +2,9 @@
 
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use juniorE\ShoppingCart\Events\Cart\CartCreatedEvent;
+use juniorE\ShoppingCart\Events\Cart\CartDeletedEvent;
+use juniorE\ShoppingCart\Events\Cart\CartUpdatedEvent;
 use juniorE\ShoppingCart\Events\CartItems\CartItemCreatedEvent;
 use juniorE\ShoppingCart\Events\CartItems\CartItemDeletedEvent;
 use juniorE\ShoppingCart\Events\CartItems\CartItemUpdatedEvent;
@@ -14,7 +17,30 @@ class CartEventTests extends TestCase
     /**
      * @test
      */
-    public function cart_item_updated_event(){
+    public function cart_events(){
+        Event::fake([
+            CartCreatedEvent::class,
+            CartUpdatedEvent::class,
+            CartDeletedEvent::class
+        ]);
+
+        $cart = cart();
+
+        Event::assertDispatchedTimes(CartCreatedEvent::class, 1);
+
+        cart()->updateIdentifier(md5(now()->toISOString()));
+
+        Event::assertDispatchedTimes(CartUpdatedEvent::class, 1);
+
+        cart()->destroy();
+
+        Event::assertDispatchedTimes(CartDeletedEvent::class, 1);
+    }
+
+    /**
+     * @test
+     */
+    public function cart_item_events(){
         Event::fake([
             CartItemCreatedEvent::class,
             CartItemUpdatedEvent::class,

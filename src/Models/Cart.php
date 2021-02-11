@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Log;
+use juniorE\ShoppingCart\Events\Cart\CartCreatedEvent;
+use juniorE\ShoppingCart\Events\Cart\CartDeletedEvent;
+use juniorE\ShoppingCart\Events\Cart\CartUpdatedEvent;
 
 /**
  * Class Cart
@@ -77,5 +80,22 @@ class Cart extends Model
         } catch (\Exception $e) {
             Log::error("Error while trying to clean up database.");
         }
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updated(function(Cart $model) {
+            event(new CartUpdatedEvent($model));
+        });
+
+        static::created(function(Cart $model) {
+            event(new CartCreatedEvent($model));
+        });
+
+        static::deleted(function(Cart $model) {
+            event(new CartDeletedEvent($model));
+        });
     }
 }
