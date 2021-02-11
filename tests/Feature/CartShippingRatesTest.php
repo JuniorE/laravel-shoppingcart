@@ -114,4 +114,17 @@ class CartShippingRatesTest extends TestCase
         $this->assertEquals(0, $this->invoice->minimum_cart_price);
         $this->assertEquals(100, $this->invoiceFree->minimum_cart_price);
     }
+
+    /**
+     * @test
+     */
+    public function can_remove_shipping_rates(){
+        $this->assertCount(3, CartShippingRate::all());
+
+        cart()->shippingRateRepository->removeShippingRate($this->invoice);
+        cart()->shippingRateRepository->removeShippingRate($this->invoiceFree);
+        cart()->shippingRateRepository->removeShippingRate($this->cash);
+
+        $this->assertCount(0, CartShippingRate::all());
+    }
 }
