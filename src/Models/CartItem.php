@@ -61,6 +61,14 @@ class CartItem extends Model
     public function updateHash()
     {
         $this->row_hash = $this->getRowHash();
+//        dump($this->row_hash, collect($this->attributes)
+//                ->only([
+//                    'additional'
+//                ])
+//                ->put('cart_id', (int) $this->cart_id)
+//                ->put('plu', (int) $this->plu)
+//                ->toJson()
+//        );
     }
 
     public static function getHash($attributes)

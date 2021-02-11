@@ -635,5 +635,26 @@ class CartTest extends TestCase
 
         $cart->addProduct($product6, true);
         $this->assertCount(5, $cart->items());
+
+        $product7 = [
+            "plu" => 5,
+            "quantity" => 2,
+            "price" => 4.95,
+            "additional" => [
+                "comment" => "abc"
+            ]
+        ];
+
+        cart()->destroy();
+
+        cart()->addProduct($product7);
+        $this->assertCount(1, cart()->items());
+        cart()->addProduct($product7);
+        $this->assertCount(1, cart()->items());
+        cart()->addProduct($product7);
+        $this->assertCount(1, cart()->items());
+        $item = cart()->addProduct($product7);
+        $this->assertCount(1, cart()->items());
+        $this->assertEquals(8, $item->quantity);
     }
 }
