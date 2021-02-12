@@ -68,6 +68,14 @@ class EloquentCartDatabase implements CartDatabase
         return CartItem::where('cart_id', $cartIdentifier ?: cart()->id)->get();
     }
 
+    public function getCartItemsTree(int $cartIdentifier=null): Collection
+    {
+        return CartItem::where('cart_id', $cartIdentifier ?: cart()->id)
+            ->whereNull('parent_id')
+            ->with('subproducts')
+            ->get();
+    }
+
     public function removeCartItem(CartItem $item): void
     {
         $item->delete();

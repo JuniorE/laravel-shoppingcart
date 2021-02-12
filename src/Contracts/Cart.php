@@ -93,4 +93,6 @@ interface Cart
     public function getShippingRate(): CartShippingRate;
 
     public function contains(array $plus): bool;
+
+    public function itemsTree(): Collection;
 }

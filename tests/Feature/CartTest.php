@@ -657,4 +657,39 @@ class CartTest extends TestCase
         $this->assertCount(1, cart()->items());
         $this->assertEquals(8, $item->quantity);
     }
+
+    /**
+     * @test
+     */
+    public function get_cart_items_as_a_tree_structure(){
+        $parent = cart()->addProduct([
+            "plu" => 5,
+            "price" => 2,
+            "quantity" => 6
+        ]);
+
+        cart()->addProduct([
+            "plu" => 6,
+            "quantity" => 1,
+            "parent_id" => $parent->id
+        ]);
+
+        cart()->addProduct([
+            "plu" => 7,
+            "quantity" => 1,
+            "parent_id" => $parent->id
+        ]);
+
+        cart()->addProduct([
+            "plu" => 8,
+            "quantity" => 1,
+            "parent_id" => $parent->id
+        ]);
+
+        $tree = cart()->itemsTree();
+        $this->assertCount(1, $tree);
+        $this->assertEquals(5, $tree->first()->plu);
+        $this->assertCount(3, $tree->first()->subproducts);
+        $this->assertEquals(6, $tree->first()->subproducts->first()->plu);
+    }
 }

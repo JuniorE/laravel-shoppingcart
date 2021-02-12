@@ -144,4 +144,12 @@ class Cart extends BaseCart
 
         return $cartItem;
     }
+
+    /**
+     * @return Collection|CartItem[]
+     */
+    public function itemsTree(): Collection
+    {
+        return app(CartDatabase::class)->getCartItemsTree();
+    }
 }
