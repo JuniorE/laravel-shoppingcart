@@ -119,29 +119,31 @@ class CartItemTest extends TestCase
     public function does_tax_amount_get_updated_automatically(){
         $product = cart()->addProduct([
             "plu" => 5,
-            "tax_percent" => 0.21
+            "tax_percent" => 0.21,
+            "quantity" => 1
         ], true);
 
         $product2 = cart()->addProduct([
             "plu" => 5,
             "tax_percent" => 0.21,
-            "price" => 10
+            "price" => 10,
+            "quantity" => 1,
         ], true);
 
         $this->assertEquals(0, $product->tax_amount);
-        $this->assertEquals(2.10, $product2->tax_amount);
+        $this->assertEqualsWithDelta(1.74, $product2->tax_amount, .005);
 
         cart()->itemsRepository->setTaxPercent($product, 0.06);
         cart()->itemsRepository->setTaxPercent($product2, 0.06);
 
         $this->assertEquals(0, $product->tax_amount);
-        $this->assertEquals(0.6, $product2->tax_amount);
+        $this->assertEqualsWithDelta(0.57, $product2->tax_amount, .005);
 
         cart()->itemsRepository->setPrice($product, 5);
         cart()->itemsRepository->setPrice($product2, 100);
 
-        $this->assertEquals(0.3, $product->tax_amount);
-        $this->assertEquals(6, $product2->tax_amount);
+        $this->assertEqualsWithDelta(0.28, $product->tax_amount, 0.005);
+        $this->assertEqualsWithDelta(5.66, $product2->tax_amount, 0.005);
     }
 
     /**
@@ -179,5 +181,30 @@ class CartItemTest extends TestCase
         } catch (\Exception $ex) {
             $this->assertTrue(false);
         }
+    }
+
+    /**
+     * @test
+     */
+    public function does_price_total_get_set_automatically_on_model_update(){
+        $cart = cart();
+        $product = $cart->addProduct([
+            "plu" => 29,
+            "price" => 29.95,
+            "quantity" => 2,
+            "tax_percent" => 0.06
+        ]);
+        $this->assertEquals(59.90, (float)$product->total);
+        $this->assertEqualsWithDelta(3.39, (float) $product->tax_amount, .005);
+        $product->update([
+            "price" => 32.15
+        ]);
+        $this->assertEquals(64.30, (float) $product->total);
+        $this->assertEqualsWithDelta(3.64, (float) $product->tax_amount, .005);
+
+        $product->update([
+            "tax_percent" => 0.21
+        ]);
+        $this->assertEqualsWithDelta(11.16, (float) $product->tax_amount, .005);
     }
 }

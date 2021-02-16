@@ -61,9 +61,21 @@ class CartItem extends Model
         return $this->hasOne(CartCoupon::class, 'name', 'coupon_code');
     }
 
+    public function onUpdate()
+    {
+        $this->updateHash();
+        $this->updateTotals();
+    }
+
     public function updateHash()
     {
         $this->row_hash = $this->getRowHash();
+    }
+
+    public function updateTotals()
+    {
+        $this->total = ($this->price ?? 0) * ($this->quantity ?? 0);
+        $this->tax_amount = $this->total - ($this->total / (1 + ($this->tax_percent ?? 0)));
     }
 
     public static function getHash($attributes)
@@ -101,15 +113,15 @@ class CartItem extends Model
         });
 
         static::creating(function(CartItem $model) {
-            $model->updateHash();
+            $model->onUpdate();
         });
 
         static::saving(function(CartItem $model) {
-            $model->updateHash();
+            $model->onUpdate();
         });
 
         static::updating(function(CartItem $model) {
-            $model->updateHash();
+            $model->onUpdate();
         });
     }
 }
