@@ -78,8 +78,11 @@ class CartItem extends Model
         $this->total = ($this->price ?? 0) * ($this->quantity ?? 0);
         $this->tax_amount = $this->total - ($this->total / (1 + ($this->tax_percent ?? 0)));
         if ($this->coupon_code) {
-            $this->discount = CartCoupon::firstWhere('name', $this->coupon_code)
-                    ->discount($this->price * $this->quantity, $this->quantity, $this->price);
+            $coupon = CartCoupon::firstWhere('name', $this->coupon_code);
+
+            if ($coupon) {
+                $this->discount = $coupon->discount($this->price * $this->quantity, $this->quantity, $this->price);
+            }
         }
     }
 
