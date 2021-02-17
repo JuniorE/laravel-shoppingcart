@@ -26,6 +26,7 @@ use juniorE\ShoppingCart\Events\CartItems\CartItemUpdatedEvent;
  * @property string|null $coupon_code
  * @property double $price
  * @property double $total
+ * @property double $discount
  * @property double|null $tax_percent
  * @property double|null $tax_amount
  * @property array|null $additional
@@ -76,6 +77,10 @@ class CartItem extends Model
     {
         $this->total = ($this->price ?? 0) * ($this->quantity ?? 0);
         $this->tax_amount = $this->total - ($this->total / (1 + ($this->tax_percent ?? 0)));
+        if ($this->coupon_code) {
+            $this->discount = CartCoupon::firstWhere('name', $this->coupon_code)
+                    ->discount($this->price * $this->quantity, $this->quantity, $this->price);
+        }
     }
 
     public static function getHash($attributes)

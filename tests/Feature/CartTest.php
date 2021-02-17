@@ -482,6 +482,46 @@ class CartTest extends TestCase
 
         $this->assertEquals(0.95, cart()->getCart()->discount);
         $this->assertEquals(1.90, cart()->getCart()->grand_total);
+
+        cart()->destroy();
+
+        $product = cart()->addProduct([
+            "plu" => 7,
+            "price" => 24.95,
+            "quantity" => 2
+        ]);
+
+        $this->assertEqualsWithDelta(49.90, (float) cart()->getCart()->grand_total, 0.005);
+
+        $welcome10 = cart()->couponsRepository->addCoupon([
+            "name" => "WELCOME10",
+            "coupon_type" => CouponTypes::PERCENT,
+            "discount_percent" => 0.1
+        ]);
+
+        cart()->itemsRepository->setCouponCode($product, $welcome10->name);
+
+        $this->assertEqualsWithDelta(44.91, (float) cart()->getCart()->grand_total, 0.005);
+
+        cart()->destroy();
+
+        $discount10 = cart()->couponsRepository->addCoupon([
+            "name" => "DISCOUNT10",
+            "coupon_type" => CouponTypes::AMOUNT,
+            "discount_amount" => 10
+        ]);
+
+        $product = cart()->addProduct([
+            "plu" => 7,
+            "price" => 24.95,
+            "quantity" => 2
+        ]);
+
+        $this->assertEqualsWithDelta(49.90, (float) cart()->getCart()->grand_total, 0.005);
+
+        cart()->itemsRepository->setCouponCode($product, $discount10->name);
+
+        $this->assertEqualsWithDelta(39.90, (float) cart()->getCart()->grand_total, 0.005);
     }
 
     /**
