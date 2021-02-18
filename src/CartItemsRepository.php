@@ -4,6 +4,8 @@
 namespace juniorE\ShoppingCart;
 
 
+use juniorE\ShoppingCart\Data\Interfaces\CartCouponDatabase;
+use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Data\Interfaces\CartItemDatabase;
 use juniorE\ShoppingCart\Models\CartItem;
 
@@ -25,6 +27,16 @@ class CartItemsRepository implements Contracts\CartItemsRepository
 
     public function setCouponCode(CartItem $item, string $code): void
     {
+        $coupon = app(CartCouponDatabase::class)->getCoupon($code);
+        if (!$coupon) {
+            return;
+        }
+
+        if ($coupon->ends_other_coupons
+            && app(CartCouponDatabase::class)->getCoupons($item->parent_id)->count() > 0) {
+            return;
+        }
+
         $this->getDatabase()->setCouponCode($item, $code);
     }
 

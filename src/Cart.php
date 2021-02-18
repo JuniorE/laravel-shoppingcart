@@ -5,6 +5,7 @@ namespace juniorE\ShoppingCart;
 
 
 use Illuminate\Support\Collection;
+use juniorE\ShoppingCart\Data\Interfaces\CartCouponDatabase;
 use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Data\Interfaces\VisitsHistoryDatabase;
 use juniorE\ShoppingCart\Models\CartCoupon;
@@ -42,8 +43,20 @@ class Cart extends BaseCart
 
     public function addCoupon(CartCoupon $coupon): void
     {
+        if ($coupon->ends_other_coupons && $this->getAllCouponsOnCart()->count() > 0) {
+            return;
+        }
+
         app(CartDatabase::class)->addCoupon($coupon);
     }
+
+    /**
+     * @return Collection|CartCoupon[]|null
+     */
+    public function getAllCouponsOnCart() {
+        return app(CartCouponDatabase::class)->getCoupons(self::getCart()->id);
+    }
+
 
     public function setCheckoutMethod(string $checkoutMethod): void
     {

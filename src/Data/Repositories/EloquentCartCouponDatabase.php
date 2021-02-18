@@ -6,10 +6,34 @@ namespace juniorE\ShoppingCart\Data\Repositories;
 
 use Carbon\Carbon;
 use juniorE\ShoppingCart\Data\Interfaces\CartCouponDatabase;
+use juniorE\ShoppingCart\Models\Cart;
 use juniorE\ShoppingCart\Models\CartCoupon;
+use juniorE\ShoppingCart\Models\CartItem;
 
 class EloquentCartCouponDatabase implements CartCouponDatabase
 {
+    public function getCoupons(int $cartId = null)
+    {
+        if ($cartId) {
+            $coupons = CartItem::where('cart_id', $cartId)->whereNotNull('coupon_code')->get()->map->only('coupon_code')->flatten();
+            $cartCoupon = Cart::where('id', '=', $cartId)->first()->coupon_code;
+            if ($cartCoupon) {
+                $coupons->push($cartCoupon);
+            }
+            return CartCoupon::whereIn('name', $coupons)->get();
+        }
+        return CartCoupon::all();
+    }
+
+    /**
+     * @param string $coupon
+     * @return CartCoupon|null
+     */
+    public function getCoupon(string $coupon)
+    {
+        return CartCoupon::firstWhere('name', $coupon);
+    }
+
     public function addCoupon(array $data): CartCoupon
     {
         return CartCoupon::create($data);

@@ -37,6 +37,13 @@ interface Cart
 
 
     /**
+     * Get all active coupon codes.
+     *
+     * @returns Collection|CartItem[]|null
+     */
+    public function getAllCouponsOnCart();
+
+    /**
      * Set the checkoutMethod, this also marks the cart as 'closed' and
      * calculates the conversion time.
      *

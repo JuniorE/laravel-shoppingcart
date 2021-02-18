@@ -5,10 +5,23 @@ namespace juniorE\ShoppingCart\Data\Interfaces;
 
 
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use juniorE\ShoppingCart\Models\CartCoupon;
 
 interface CartCouponDatabase
 {
+    /**
+     * @param int|null $cartId
+     * @return Collection|CartCoupon[]|null
+     */
+    public function getCoupons(int $cartId=null);
+
+    /**
+     * @param string $coupon
+     * @return CartCoupon|null
+     */
+    public function getCoupon(string $coupon);
+
     public function addCoupon(array $data): CartCoupon;
 
     public function setName(CartCoupon $coupon, string $name): void;

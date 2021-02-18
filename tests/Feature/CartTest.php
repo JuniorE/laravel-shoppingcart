@@ -207,6 +207,7 @@ class CartTest extends TestCase
         $coupon = cart()->couponsRepository->addCoupon([
             "name" => "WELCOME10",
             "discount_percent" => 0.10,
+            "ends_other_coupons" => false
         ]);
 
         $product = cart()->addProduct([
@@ -448,7 +449,8 @@ class CartTest extends TestCase
             "conditional" => true,
             "conditions" => [
                 "applies_to" => [$cookie["plu"]]
-            ]
+            ],
+            "ends_other_coupons" => false
         ]);
 
         cart()->addProduct($cookie);
@@ -496,7 +498,8 @@ class CartTest extends TestCase
         $welcome10 = cart()->couponsRepository->addCoupon([
             "name" => "WELCOME10",
             "coupon_type" => CouponTypes::PERCENT,
-            "discount_percent" => 0.1
+            "discount_percent" => 0.1,
+            "ends_other_coupons" => false
         ]);
 
         cart()->itemsRepository->setCouponCode($product, $welcome10->name);
@@ -508,7 +511,8 @@ class CartTest extends TestCase
         $discount10 = cart()->couponsRepository->addCoupon([
             "name" => "DISCOUNT10",
             "coupon_type" => CouponTypes::AMOUNT,
-            "discount_amount" => 10
+            "discount_amount" => 10,
+            "ends_other_coupons" => false
         ]);
 
         $product = cart()->addProduct([
@@ -771,5 +775,59 @@ class CartTest extends TestCase
         $cart->itemsRepository->setQuantity($item, 5);
 
         $this->assertEqualsWithDelta(49.75, $cart->getCart()->grand_total, 0.005);
+    }
+
+    /**
+     * @test
+     */
+    public function can_get_all_applied_coupons(){
+        $cart = cart();
+
+        $coupon = $cart->couponsRepository->addCoupon([
+            "name" => "GOEDEBUREN",
+            "coupon_type" => CouponTypes::AMOUNT,
+            "discount_amount" => 5,
+            "ends_other_coupons" => false
+        ]);
+
+        $cartCoupon = $cart->couponsRepository->addCoupon([
+            "name" => "SHIP_IT_TO_ME",
+            "free_shipping" => true
+        ]);
+
+        $coupon2 = $cart->couponsRepository->addCoupon([
+            "name" => "DISCOUNT_60%",
+            "coupon_type" => CouponTypes::PERCENT,
+            "discount_amount" => .6,
+            "ends_other_coupons" => true
+        ]);
+
+        $item = $cart->addProduct([
+            "plu" => 5,
+            "price" => 10,
+            "quantity" => 1
+        ]);
+
+        $item2 = $cart->addProduct([
+            "plu" => 6,
+            "price" => 15,
+            "quantity" => 1
+        ]);
+
+        $this->assertCount(0, $cart->getAllCouponsOnCart());
+
+        $cart->addCoupon($cartCoupon);
+
+        $this->assertCount(1, $cart->getAllCouponsOnCart());
+
+        $cart->itemsRepository->setCouponCode($item, $coupon->name);
+
+        $this->assertCount(2, $cart->getAllCouponsOnCart());
+
+        $cart->itemsRepository->setCouponCode($item2, $coupon2->name);
+
+        $this->assertCount(2, $cart->getAllCouponsOnCart());
+
+        $this->assertCount(0, Models\CartCoupon::where('cart_id', $cart->id)->where('coupon_code', 'DISCOUNT_60%')->get());
     }
 }
