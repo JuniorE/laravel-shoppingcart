@@ -750,4 +750,26 @@ class CartTest extends TestCase
 
         $this->assertEquals(0, (float) $cart->getCart()->grand_total);
     }
+
+    /**
+     * @test
+     */
+    public function does_updating_cart_item_cause_price_update_in_cart(){
+        $cart = cart();
+        $item = $cart->addProduct([
+            "plu" => 5,
+            "price" => 9.95,
+            "quantity" => 1
+        ]);
+
+        $this->assertEqualsWithDelta(9.95, $cart->getCart()->grand_total, 0.005);
+
+        $cart->itemsRepository->setQuantity($item, 2);
+
+        $this->assertEqualsWithDelta(19.90, $cart->getCart()->grand_total, 0.005);
+
+        $cart->itemsRepository->setQuantity($item, 5);
+
+        $this->assertEqualsWithDelta(49.75, $cart->getCart()->grand_total, 0.005);
+    }
 }

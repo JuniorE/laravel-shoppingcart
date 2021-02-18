@@ -111,6 +111,7 @@ class CartItem extends Model
 
         static::updated(function(CartItem $model) {
             event(new CartItemUpdatedEvent($model));
+            app(CartDatabase::class)->updateTotal($model->cart_id);
         });
 
         static::created(function(CartItem $model) {
@@ -118,8 +119,8 @@ class CartItem extends Model
         });
 
         static::deleted(function(CartItem $model) {
-            app(CartDatabase::class)->updateTotal($model->cart_id);
             event(new CartItemDeletedEvent($model));
+            app(CartDatabase::class)->updateTotal($model->cart_id);
         });
 
         static::creating(function(CartItem $model) {
