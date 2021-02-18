@@ -119,7 +119,7 @@ class EloquentCartDatabase implements CartDatabase
         }
     }
 
-    public function setAdditionalData(array $data)
+    public function setAdditionalData(array $data): void
     {
         $cart = cart()->getCart();
         $cart->update([
@@ -128,22 +128,27 @@ class EloquentCartDatabase implements CartDatabase
         ]);
     }
 
-    public function updateTotal()
+    public function updateTotal(int $cartId=null): void
     {
-        $cart = cart()->getCart();
-        $total = cart()->items()->reduce(function($carry, CartItem $item) {
-            return $carry + $item->price * $item->quantity;
-        });
+        if (!$cartId) {
+            $cart = cart();
+        } else {
+            $cart = cart(Cart::whereId($cartId)->first()->identifier);
+        }
 
-        $subtotal = cart()->items()->reduce(function($carry, CartItem $item) {
+        $total = $cart->items()->reduce(function($carry, CartItem $item) {
+            return $carry + $item->price * $item->quantity;
+        }, 0);
+
+        $subtotal = $cart->items()->reduce(function($carry, CartItem $item) {
             return $carry + ($item->price * $item->quantity) / (1 + $item->tax_percent);
-        });
+        }, 0);
 
         $taxes = $total - $subtotal;
 
         $discount = $this->totalDiscount($total);
 
-        $cart->update([
+        $cart->getCart()->update([
             "grand_total" => $total - $discount,
             "tax_total" => $taxes,
             "sub_total" => $subtotal,

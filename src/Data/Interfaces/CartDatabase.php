@@ -48,9 +48,9 @@ interface CartDatabase
 
     public function setConversionTime(int $minutes): void;
 
-    public function updateTotal();
+    public function updateTotal(int $cartId=null): void;
 
-    public function setAdditionalData(array $data);
+    public function setAdditionalData(array $data): void;
 
     public function addCoupon(CartCoupon $coupon): void;
 

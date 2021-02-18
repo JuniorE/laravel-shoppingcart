@@ -6,6 +6,7 @@ namespace juniorE\ShoppingCart\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Events\CartItems\CartItemCreatedEvent;
 use juniorE\ShoppingCart\Events\CartItems\CartItemDeletedEvent;
 use juniorE\ShoppingCart\Events\CartItems\CartItemUpdatedEvent;
@@ -117,6 +118,7 @@ class CartItem extends Model
         });
 
         static::deleted(function(CartItem $model) {
+            app(CartDatabase::class)->updateTotal($model->cart_id);
             event(new CartItemDeletedEvent($model));
         });
 

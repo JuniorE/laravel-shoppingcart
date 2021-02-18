@@ -732,4 +732,22 @@ class CartTest extends TestCase
         $this->assertCount(3, $tree->first()->subproducts);
         $this->assertEquals(6, $tree->first()->subproducts->first()->plu);
     }
+
+    /**
+     * @test
+     */
+    public function does_price_update_after_deleting_a_cart_item(){
+        $cart = cart();
+        $product = $cart->addProduct([
+            "plu" => 5,
+            "price" => 9.95,
+            "quantity" => 2
+        ]);
+
+        $this->assertEqualsWithDelta(19.90, (float) $cart->getCart()->grand_total, 0.005);
+
+        $cart->removeItem($product);
+
+        $this->assertEquals(0, (float) $cart->getCart()->grand_total);
+    }
 }
