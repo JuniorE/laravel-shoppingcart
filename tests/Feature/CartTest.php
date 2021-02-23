@@ -830,4 +830,33 @@ class CartTest extends TestCase
 
         $this->assertCount(0, Models\CartCoupon::where('cart_id', $cart->id)->where('coupon_code', 'DISCOUNT_60%')->get());
     }
+
+    /**
+     * @test
+     */
+    public function can_empty_cart(){
+        $identifier = md5("lmao");
+        $cart = cart();
+        $cart->updateIdentifier($identifier);
+
+        $this->assertEquals($identifier, $cart->identifier);
+
+        $cart->addProduct([
+            "plu" => 5
+        ]);
+        $cart->addProduct([
+            "plu" => 6
+        ]);
+        $cart->addProduct([
+            "plu" => 7
+        ]);
+
+        $this->assertCount(3, $cart->items());
+
+        $cart->empty();
+
+        $this->assertCount(0, $cart->items());
+
+        $this->assertEquals($identifier, $cart->identifier);
+    }
 }

@@ -10,6 +10,11 @@ use juniorE\ShoppingCart\Models\CartItem;
 
 class EloquentCartItemDatabase implements CartItemDatabase
 {
+    public function emptyCart(int $id): void
+    {
+        CartItem::where('cart_id', $id)->delete();
+    }
+
     public function setQuantity(CartItem $item, int $quantity): void
     {
         $item->update([

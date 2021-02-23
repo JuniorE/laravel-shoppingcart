@@ -8,6 +8,8 @@ use juniorE\ShoppingCart\Models\CartItem;
 
 interface CartItemDatabase
 {
+    public function emptyCart(int $id);
+
     /**
      * @param CartItem $item
      * @param int $quantity

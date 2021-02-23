@@ -7,6 +7,7 @@ namespace juniorE\ShoppingCart;
 use Illuminate\Support\Collection;
 use juniorE\ShoppingCart\Data\Interfaces\CartCouponDatabase;
 use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
+use juniorE\ShoppingCart\Data\Interfaces\CartItemDatabase;
 use juniorE\ShoppingCart\Data\Interfaces\VisitsHistoryDatabase;
 use juniorE\ShoppingCart\Models\CartCoupon;
 use juniorE\ShoppingCart\Models\CartItem;
@@ -39,6 +40,14 @@ class Cart extends BaseCart
     public function items(): Collection
     {
         return $this->cartItems;
+    }
+
+    public function empty()
+    {
+        $this->cartItems = collect();
+        app(CartItemDatabase::class)->emptyCart($this->id);
+
+        return $this;
     }
 
     public function addCoupon(CartCoupon $coupon): void
