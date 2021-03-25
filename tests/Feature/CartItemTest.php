@@ -207,4 +207,63 @@ class CartItemTest extends TestCase
         ]);
         $this->assertEqualsWithDelta(11.16, (float) $product->tax_amount, .005);
     }
+
+    /**
+     * @test
+     */
+    public function can_merge_rows(){
+        $cart = cart();
+        $product = [
+            "quantity" => 1,
+            "plu" => 695,
+            "type" => 1,
+            "weight" => 0,
+            "total_weight" => 0,
+            "price" => 4.6,
+            "tax_percent" => 0.06,
+            "additional" => [
+                "name" => "ANANASSAP FLES 1L",
+                "slug" => "ananassap-fles-1l",
+                "unit" => "FLES",
+                "unit_id" => 9,
+                "unit_price" => 4.6,
+                "image_url" => "/images/placeholder.png",
+                "subunit" => "FLES",
+                "subunit_id" => 9,
+                "subunitverh"=> 1,
+                "min_bestel_aant" => 1,
+                "comment" => "",
+            ],
+        ];
+        $product2 = [
+            "quantity" => 1,
+            "plu" => 690,
+            "price" => 10,
+            "tax_percent" => 0.06,
+            "type" => 1
+        ];
+
+        $item = $cart->addProduct($product);
+
+        $this->assertCount(1, $cart->items());
+
+        $cart->addProduct($product2);
+
+        $this->assertCount(2, $cart->items());
+
+        $cart->addProduct($product);
+
+        $this->assertCount(2, $cart->items());
+
+        $this->assertCount(2, $cart->items());
+
+        $cart->addProduct($product);
+
+        $cart->addProduct($product);
+
+        $cart->addProduct($product);
+
+        $this->assertEquals(5, $cart->getItem($item->id)->quantity);
+        $this->assertCount(2, $cart->items());
+    }
 }

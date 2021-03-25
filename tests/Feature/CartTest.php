@@ -203,7 +203,7 @@ class CartTest extends TestCase
     /**
      * @test
      */
-    public function can_add_coupon_to_cart(){
+    public function can_add_coupon_to_cart_items() {
         $coupon = cart()->couponsRepository->addCoupon([
             "name" => "WELCOME10",
             "discount_percent" => 0.10,
