@@ -35,5 +35,6 @@ jobs:
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
       
-    - name: PHPUnit
-      run: phpunit
+    - name: PHPUnit run tests
+      uses: php-actions/phpunit@v2
+
