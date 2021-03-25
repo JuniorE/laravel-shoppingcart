@@ -94,11 +94,18 @@ class CartItem extends Model
 
     public function getRowHash()
     {
+        $additional = collect($this->attributes)
+            ->only([
+                'additional'
+            ])
+            ->toArray()["additional"];
+
+        $additional = json_decode($additional, true);
+
+        ksort($additional);
+
         return sha1(
-            collect($this->attributes)
-                ->only([
-                    'additional'
-                ])
+            collect($additional)
                 ->put('cart_id', (int) $this->cart_id)
                 ->put('plu', (int) $this->plu)
                 ->toJson()

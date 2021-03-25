@@ -266,4 +266,41 @@ class CartItemTest extends TestCase
         $this->assertEquals(5, $cart->getItem($item->id)->quantity);
         $this->assertCount(2, $cart->items());
     }
+
+    /**
+     * @test
+     */
+    public function can_merge_rows_if_keys_arent_in_same_order(){
+        $product = [
+            "quantity" => 1,
+            "plu" => 695,
+            "type" => 1,
+            "additional" => [
+                "name" => "ANANASSAP FLES 1L",
+                "unit" => "FLES",
+                "comment" => "",
+            ],
+        ];
+
+        $product2 = [
+            "quantity" => 1,
+            "plu" => 695,
+            "type" => 1,
+            "additional" => [
+                "comment" => "",
+                "unit" => "FLES",
+                "name" => "ANANASSAP FLES 1L",
+            ],
+        ];
+
+        $cart = cart();
+
+        $product = $cart->addProduct($product);
+
+        $cart->addProduct($product2);
+
+        $this->assertCount(1, $cart->items());
+
+        $this->assertEquals(2, $cart->getItem($product->id)->quantity);
+    }
 }

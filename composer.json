@@ -4,7 +4,8 @@
     "description": "Laravel shopping cart",
     "license": "MIT",
     "require": {
-        "digitalmove/k-nearest": "dev-master"
+        "digitalmove/k-nearest": "dev-master",
+        "ext-json": "*"
     },
     "require-dev": {
         "orchestra/testbench": "^6.11"
