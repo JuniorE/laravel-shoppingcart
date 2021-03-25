@@ -98,11 +98,15 @@ class CartItem extends Model
             ->only([
                 'additional'
             ])
-            ->toArray()["additional"];
+            ->toArray();
 
-        $additional = json_decode($additional, true);
+        if (isset($additional["additional"])) {
+            $additional = $additional["additional"];
 
-        ksort($additional);
+            $additional = json_decode($additional, true);
+
+            ksort($additional);
+        }
 
         return sha1(
             collect($additional)
