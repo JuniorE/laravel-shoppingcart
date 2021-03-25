@@ -13,6 +13,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.3'
+        tools: phpunit
 
     - name: Validate composer.json and composer.lock
       run: composer validate
@@ -30,5 +36,6 @@ jobs:
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
       
-    - name: PHPUnit
+    - name: PHPUnit run tests
       run: phpunit
+
