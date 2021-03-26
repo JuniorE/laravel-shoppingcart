@@ -48,6 +48,11 @@ class CartItem extends Model
 
     ];
 
+    public function cart()
+    {
+        return $this->belongsTo(\juniorE\ShoppingCart\Cart::class);
+    }
+
     public function subproducts()
     {
         return $this->hasMany(CartItem::class, "parent_id");
@@ -127,6 +132,7 @@ class CartItem extends Model
 
         static::created(function(CartItem $model) {
             event(new CartItemCreatedEvent($model));
+            app(CartDatabase::class)->updateTotal($model->cart_id);
         });
 
         static::deleted(function(CartItem $model) {

@@ -14,11 +14,12 @@ class EloquentVisitsHistoryDatabase implements VisitsHistoryDatabase
      */
     public function markVisited(string $plu): void
     {
-        $history = VisitsHistory::firstWhere("cart_id", cart()->id);
+        $cart = cart();
+        $history = VisitsHistory::firstWhere("cart_id", $cart->id);
 
         if (!$history) {
             VisitsHistory::create([
-                "cart_id" => cart()->id,
+                "cart_id" => $cart->id,
                 "visits" => [$plu]
             ]);
             return;

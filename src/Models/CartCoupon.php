@@ -52,12 +52,12 @@ class CartCoupon extends Model
 
     ];
 
-    private function conditionsSatisfied(CartItem $item=null)
+    private function conditionsSatisfied(\juniorE\ShoppingCart\Cart $cart, CartItem $item=null)
     {
         if ($this->conditional) {
             if (isset($this->conditions["cart_contains_plus"])) {
                 foreach($this->conditions["cart_contains_plus"] as $plus) {
-                    if(cart()->contains($plus)) {
+                    if($cart->contains($plus)) {
                         return true;
                     }
                 }
@@ -71,12 +71,24 @@ class CartCoupon extends Model
         return true;
     }
 
-    public function discount(float $price, int $quantity=0, float $productPrice=0.0)
+    public function discount(float $price, int $quantity=0, float $productPrice=0.0, \juniorE\ShoppingCart\Cart $cart=null)
     {
-        if (!$this->conditionsSatisfied()) {
+        if (!$cart) {
+            $cart = cart();
+        }
+
+        if (!$this->conditionsSatisfied($cart)) {
             return 0;
         }
 
+        return min(
+            $cart->getCart()->grand_total,
+            $this->discountAmount($price, $quantity, $productPrice)
+        );
+    }
+
+    private function discountAmount(float $price, int $quantity, float $productPrice)
+    {
         switch ($this->coupon_type) {
             case CouponTypes::AMOUNT:
                 return $this->discount_amount;

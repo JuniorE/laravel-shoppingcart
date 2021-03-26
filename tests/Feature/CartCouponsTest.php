@@ -338,4 +338,36 @@ class CartCouponsTest extends TestCase
 
         $this->assertCount(0, CartCoupon::all());
     }
+
+    /**
+     * @test
+     */
+    public function cant_get_negative_prices(){
+        $cart = cart();
+
+        $coupon = $cart->couponsRepository->addCoupon([
+            "name" => "GOEDE BUREN",
+            "discount_amount" => 100,
+        ]);
+
+        $cart->addProduct([
+            "plu" => 1,
+            "quantity" => 1,
+            "price" => 9.99,
+        ]);
+
+        $this->assertEquals(9.99, $cart->getCart()->grand_total);
+
+        $cart->addCoupon($coupon);
+
+        $this->assertEquals(0, $cart->getCart()->grand_total);
+
+        $cart->addProduct([
+            "plu" => 2,
+            "quantity" => 1,
+            "price" => 100
+        ]);
+
+        $this->assertEquals(9.99, $cart->getCart()->grand_total);
+    }
 }
