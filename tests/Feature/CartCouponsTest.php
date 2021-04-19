@@ -361,6 +361,7 @@ class CartCouponsTest extends TestCase
         $cart->addCoupon($coupon);
 
         $this->assertEquals(0, $cart->getCart()->grand_total);
+        $this->assertEquals(9.99, $cart->getCart()->discount);
 
         $cart->addProduct([
             "plu" => 2,
@@ -369,5 +370,37 @@ class CartCouponsTest extends TestCase
         ]);
 
         $this->assertEquals(9.99, $cart->getCart()->grand_total);
+        $this->assertEquals(100, $cart->getCart()->discount);
+    }
+
+    /**
+     * @test
+     */
+    public function can_remove_coupons(){
+        $cart = cart();
+
+        $coupon = $cart->couponsRepository->addCoupon([
+            "name" => "GOEDE BUREN",
+            "discount_amount" => 10,
+            "coupon_type" => CouponTypes::AMOUNT,
+        ]);
+
+        $cart->addProduct([
+            "plu" => 1,
+            "quantity" => 1,
+            "price" => 19.99,
+        ]);
+
+        $this->assertEquals(19.99, $cart->getCart()->grand_total);
+
+        $cart->addCoupon($coupon);
+
+        $this->assertEquals(10, $cart->getCart()->discount);
+        $this->assertEquals(9.99, $cart->getCart()->grand_total);
+
+        $cart->removeCoupon();
+
+        $this->assertEquals(0, $cart->getCart()->discount);
+        $this->assertEquals(19.99, $cart->getCart()->grand_total);
     }
 }

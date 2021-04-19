@@ -54,5 +54,7 @@ interface CartDatabase
 
     public function addCoupon(CartCoupon $coupon): void;
 
+    public function removeCoupon(): void;
+
     public function clear(bool $hard=false): void;
 }

@@ -59,6 +59,11 @@ class Cart extends BaseCart
         app(CartDatabase::class)->addCoupon($coupon);
     }
 
+    public function removeCoupon(): void
+    {
+        app(CartDatabase::class)->removeCoupon();
+    }
+
     /**
      * @return Collection|CartCoupon[]|null
      */

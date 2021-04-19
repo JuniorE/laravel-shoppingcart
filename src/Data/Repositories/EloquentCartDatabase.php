@@ -110,6 +110,15 @@ class EloquentCartDatabase implements CartDatabase
         $this->updateTotal();
     }
 
+    public function removeCoupon(): void
+    {
+        cart()->getCart()->update([
+            "coupon_code" => null,
+        ]);
+
+        $this->updateTotal();
+    }
+
     public function clear(bool $hard=false): void
     {
         if ($hard) {
