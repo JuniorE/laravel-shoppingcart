@@ -15,8 +15,12 @@ use juniorE\ShoppingCart\Models\CartShippingRate;
 
 class Cart extends BaseCart
 {
-    public function addProduct(array $product, bool $forceNewLine=false): CartItem
+    public function addProduct(array $product, bool $forceNewLine=null): CartItem
     {
+        if ($forceNewLine === null) {
+            $forceNewLine = !config('shoppingcart.merge_lines');
+        }
+
         $product = collect($product)
             ->merge(["cart_id" => $this->id])
             ->toArray();
@@ -26,6 +30,15 @@ class Cart extends BaseCart
         }
 
         return $this->updateOrCreateCartItem($product);
+    }
+
+    public function addProducts(...$products): Collection
+    {
+        $items = collect();
+        foreach($products as $product) {
+            $items->push($this->addProduct($product, !config('shoppingcart.merge_lines')));
+        }
+        return $items;
     }
 
     public function removeItem(CartItem $item): void

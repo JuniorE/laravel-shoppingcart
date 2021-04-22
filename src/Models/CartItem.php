@@ -82,14 +82,35 @@ class CartItem extends Model
     public function updateTotals()
     {
         $this->total = ($this->price ?? 0) * ($this->quantity ?? 0);
-        $this->tax_amount = $this->total - ($this->total / (1 + ($this->tax_percent ?? 0)));
-        if ($this->coupon_code) {
+        if ($this->taxable()) {
+            $this->tax_amount = $this->total - ($this->total / (1 + ($this->tax_percent ?? 0)));
+        } else {
+            $this->tax_amount = 0;
+        }
+        if ($this->coupon_code && $this->discountable()) {
             $coupon = CartCoupon::firstWhere('name', $this->coupon_code);
 
-            if ($coupon) {
+            if ($coupon && !collect("shoppingcart.discount_exempt_types")->contains($this->type)) {
                 $this->discount = $coupon->discount($this->price * $this->quantity, $this->quantity, $this->price);
             }
         }
+    }
+
+    public function discountable()
+    {
+        return !collect(config('shoppingcart.discount_exempt_types'))
+            ->contains($this->type);
+    }
+
+    public function taxable()
+    {
+        return self::isTaxable($this->type);
+    }
+
+    public static function isTaxable($type)
+    {
+        return !collect(config('shoppingcart.tax_exempt_types'))
+            ->contains($type);
     }
 
     public static function getHash($attributes)
@@ -117,6 +138,7 @@ class CartItem extends Model
             collect($additional)
                 ->put('cart_id', (int) $this->cart_id)
                 ->put('plu', (int) $this->plu)
+                ->put('type', (int) $this->type)
                 ->toJson()
         );
     }

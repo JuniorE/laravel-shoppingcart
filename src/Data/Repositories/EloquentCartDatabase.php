@@ -30,10 +30,16 @@ class EloquentCartDatabase implements CartDatabase
 
     public function createCartItem(array $product): CartItem
     {
+        if (isset($product["type"]) && CartItem::isTaxable($product["type"])) {
+            $taxAmount = ($product["price"] ?? 0) * ($product["tax_percent"] ?? 0);
+        } else {
+            $taxAmount = 0;
+        }
+
         $cartItem = CartItem::create(
             collect($product)
                 ->merge([
-                    "tax_amount" => ($product["price"] ?? 0) * ($product["tax_percent"] ?? 0)
+                    "tax_amount" => $taxAmount
                 ])
                 ->toArray()
         );
@@ -150,7 +156,11 @@ class EloquentCartDatabase implements CartDatabase
         }, 0);
 
         $subtotal = $cart->items()->reduce(function($carry, CartItem $item) {
-            return $carry + ($item->price * $item->quantity) / (1 + $item->tax_percent);
+            if ($item->taxable()) {
+                return $carry + ($item->price * $item->quantity) / (1 + $item->tax_percent);
+            } else {
+                return $carry + ($item->price * $item->quantity);
+            }
         }, 0);
 
         $taxes = $total - $subtotal;
@@ -170,11 +180,17 @@ class EloquentCartDatabase implements CartDatabase
         $cart = cart();
         $coupon = $cart->getCart()->coupon;
 
-        $itemDiscounts = $cart->items()->reduce(function($carry, $item) {
+        $itemDiscounts = $cart->items()->reduce(function($carry, CartItem $item) {
             return $carry + $item->discount;
         }, 0);
 
         if ($coupon) {
+            $total = $cart->items()->reduce(function($carry, CartItem $item) {
+                if (!$item->discountable()) {
+                    return $carry;
+                }
+                return $carry + $item->total;
+            });
             return $coupon->discount($total) + $itemDiscounts;
         }
         return 0 + $itemDiscounts;
