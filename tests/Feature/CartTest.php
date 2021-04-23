@@ -842,13 +842,22 @@ class CartTest extends TestCase
         $this->assertEquals($identifier, $cart->identifier);
 
         $cart->addProduct([
-            "plu" => 5
+            "plu" => 5,
+            "price" => 4.99,
+            "quantity" => 1,
+            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::PLU,
         ]);
         $cart->addProduct([
-            "plu" => 6
+            "plu" => 6,
+            "price" => 9.99,
+            "quantity" => 1,
+            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::PLU,
         ]);
         $cart->addProduct([
-            "plu" => 7
+            "plu" => 7,
+            "price" => 2.49,
+            "quantity" => 1,
+            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::PLU,
         ]);
 
         $this->assertCount(3, $cart->items());
@@ -858,5 +867,9 @@ class CartTest extends TestCase
         $this->assertCount(0, $cart->items());
 
         $this->assertEquals($identifier, $cart->identifier);
+
+        $this->assertEquals(0, $cart->getCart()->grand_total);
+        $this->assertEquals(0, $cart->getCart()->tax_total);
+        $this->assertEquals(0, $cart->getCart()->discount);
     }
 }
