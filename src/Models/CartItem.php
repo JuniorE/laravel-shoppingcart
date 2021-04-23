@@ -144,6 +144,13 @@ class CartItem extends Model
         );
     }
 
+    public function getSubproductsOfType($type)
+    {
+        return $this->subproducts->filter(function(CartItem $product) use ($type) {
+            return (string) $product->type === (string) $type;
+        });
+    }
+
     protected static function boot()
     {
         parent::boot();

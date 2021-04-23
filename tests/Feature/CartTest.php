@@ -904,4 +904,58 @@ class CartTest extends TestCase
         $this->assertEquals(0, $cart->getCart()->tax_total);
         $this->assertEquals(0, $cart->getCart()->discount);
     }
+
+    /**
+     * @test
+     */
+    public function can_get_subproducts_of_type(){
+        $cart = cart();
+        $parent = $cart->addProduct([
+            "plu" => 1,
+            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::PLU
+        ]);
+        $cart->addProduct([
+            "plu" => 2,
+            "parent_id" => $parent->id,
+            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::PLU
+        ]);
+        $cart->addProduct([
+            "plu" => 3,
+            "parent_id" => $parent->id,
+            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::MENU
+        ]);
+        $cart->addProduct([
+            "plu" => 4,
+            "parent_id" => $parent->id,
+            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::WARRANTY
+        ]);
+        $cart->addProduct([
+            "plu" => 5,
+            "parent_id" => $parent->id,
+            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::WARRANTY
+        ]);
+        $cart->addProduct([
+            "plu" => 6,
+            "parent_id" => $parent->id,
+            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::WARRANTY
+        ]);
+        $cart->addProduct([
+            "plu" => 7,
+            "parent_id" => $parent->id,
+            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::RENT
+        ]);
+
+        $this->assertCount(1, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::PLU));
+        $this->assertEquals(2, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::PLU)->first()->plu);
+
+        $this->assertCount(1, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::MENU));
+        $this->assertEquals(3, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::MENU)->first()->plu);
+
+        $this->assertCount(3, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::WARRANTY));
+        $this->assertEquals(4, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::WARRANTY)->first()->plu);
+        $this->assertEquals(6, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::WARRANTY)->last()->plu);
+
+        $this->assertCount(1, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::RENT));
+        $this->assertEquals(7, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::RENT)->first()->plu);
+    }
 }
