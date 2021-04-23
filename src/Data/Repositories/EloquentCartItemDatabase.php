@@ -13,6 +13,7 @@ class EloquentCartItemDatabase implements CartItemDatabase
     public function emptyCart(int $id): void
     {
         CartItem::where('cart_id', $id)->delete();
+        app(CartDatabase::class)->removeCoupon();
         app(CartDatabase::class)->updateTotal($id);
     }
 

@@ -872,4 +872,36 @@ class CartTest extends TestCase
         $this->assertEquals(0, $cart->getCart()->tax_total);
         $this->assertEquals(0, $cart->getCart()->discount);
     }
+
+    /**
+     * @test
+     */
+    public function can_empty_cart_with_coupon_code(){
+        $cart =  cart();
+
+        $cart->addProduct([
+            "plu" => 7,
+            "price" => 2.49,
+            "quantity" => 1,
+            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::PLU,
+        ]);
+
+        $coupon = $cart->couponsRepository->addCoupon([
+            "name" => "10PROCENT",
+            "coupon_type" => CouponTypes::PERCENT,
+            "discount_percent" => 0.10,
+        ]);
+
+        $cart->addCoupon($coupon);
+
+        $this->assertCount(1, $cart->items());
+        $this->assertEquals(0.249, $cart->getCart()->discount);
+
+        $cart->empty();
+
+        $this->assertCount(0, $cart->items());
+        $this->assertEquals(0, $cart->getCart()->grand_total);
+        $this->assertEquals(0, $cart->getCart()->tax_total);
+        $this->assertEquals(0, $cart->getCart()->discount);
+    }
 }
