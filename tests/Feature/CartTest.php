@@ -629,12 +629,12 @@ class CartTest extends TestCase
 
         $product4 = [
             "plu" => 6,
-            "quantity" => 3
+            "type" => 1,
         ];
 
         $product5 = [
             "plu" => 7,
-            "quantity" => 1
+            "type" => 1,
         ];
 
         $product6 = [

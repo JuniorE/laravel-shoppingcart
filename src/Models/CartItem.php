@@ -7,6 +7,7 @@ namespace juniorE\ShoppingCart\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
+use juniorE\ShoppingCart\Enums\ItemTypes;
 use juniorE\ShoppingCart\Events\CartItems\CartItemCreatedEvent;
 use juniorE\ShoppingCart\Events\CartItems\CartItemDeletedEvent;
 use juniorE\ShoppingCart\Events\CartItems\CartItemUpdatedEvent;
@@ -138,7 +139,7 @@ class CartItem extends Model
             collect($additional)
                 ->put('cart_id', (int) $this->cart_id)
                 ->put('plu', (int) $this->plu)
-                ->put('type', (int) $this->type)
+                ->put('type', (int) ($this->type ?? ItemTypes::PLU))
                 ->toJson()
         );
     }
