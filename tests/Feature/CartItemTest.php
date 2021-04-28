@@ -303,4 +303,25 @@ class CartItemTest extends TestCase
 
         $this->assertEquals(2, $cart->getItem($product->id)->quantity);
     }
+
+    /**
+     * @test
+     */
+    public function can_add_item_with_decimal_quantity(){
+        $cart = cart();
+
+        $product = [
+            "quantity" => 0.25,
+            "plu" => 695,
+            "type" => 1,
+            "additional" => [
+                "name" => "Préparé 250g",
+                "unit" => "KG",
+                "comment" => "",
+            ],
+        ];
+
+        $cart->addProduct($product);
+        $this->assertEquals((float) 0.25, $cart->items()->first()->quantity);
+    }
 }
