@@ -234,13 +234,20 @@ class CartTest extends TestCase
      * @test
      */
     public function can_set_shipping_method(){
-        cart()->addProduct([
+        $cart = cart();
+        $cart->addProduct([
             "plu" => 5
         ]);
 
         $this->assertNull(cart()->getCart()->shipping_method);
+        
+        $truck = cart()->shippingRateRepository->addShippingRate([
+            "method" => "truck",
+            "price" => 20,
+            "minimum_cart_price" => 0
+        ]);
 
-        cart()->setShippingMethod("truck");
+        $cart->setShippingMethod("truck");
 
         $this->assertEquals("truck", cart()->getCart()->shipping_method);
     }
