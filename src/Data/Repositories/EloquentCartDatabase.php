@@ -143,6 +143,14 @@ class EloquentCartDatabase implements CartDatabase
         ]);
     }
 
+    public function removeShippingMethod(): void
+    {
+        $cart = cart()->getCart();
+        $cart->update([
+            "shipping_method" => null,
+        ]);
+    }
+
     public function updateTotal(int $cartId=null): void
     {
         if (!$cartId) {

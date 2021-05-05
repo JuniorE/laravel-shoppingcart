@@ -14,6 +14,7 @@ class EloquentCartItemDatabase implements CartItemDatabase
     {
         CartItem::where('cart_id', $id)->delete();
         app(CartDatabase::class)->removeCoupon();
+        app(CartDatabase::class)->removeShippingMethod();
         app(CartDatabase::class)->updateTotal($id);
     }
 

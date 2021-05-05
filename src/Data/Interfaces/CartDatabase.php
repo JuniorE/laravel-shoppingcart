@@ -44,6 +44,8 @@ interface CartDatabase
 
     public function setCheckoutMethod(string $method): void;
 
+    public function removeShippingMethod(): void;
+
     public function setShippingMethod(string $method): void;
 
     public function setConversionTime(int $minutes): void;

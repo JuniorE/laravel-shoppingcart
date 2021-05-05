@@ -998,5 +998,11 @@ class CartTest extends TestCase
         ]);
 
         $this->assertEquals($truck2->price + 50, $cart->getCart()->grand_total);
+
+        $cart->empty();
+
+        $this->assertNull($cart->getCart()->shipping_method);
+        $this->assertEquals(0, $cart->getCart()->grand_total);
+        $this->assertEquals(0, $cart->getDeliveryCost());
     }
 }
