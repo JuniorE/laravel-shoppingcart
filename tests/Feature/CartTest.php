@@ -1005,4 +1005,32 @@ class CartTest extends TestCase
         $this->assertEquals(0, $cart->getCart()->grand_total);
         $this->assertEquals(0, $cart->getDeliveryCost());
     }
+
+    /**
+     * @test
+     */
+    public function removing_shipping_method_lowers_total_price_if_necessary(){
+        $cart = cart();
+
+        $truck = $cart->shippingRateRepository->addShippingRate([
+            "method" => "truck",
+            "price" => 20,
+            "minimum_cart_price" => 0
+        ]);
+
+        $cart->addProduct([
+            "plu" => 1,
+            "quantity" => 1,
+            "price" => 5,
+            "type" => ItemTypes::PLU
+        ]);
+
+        $cart->setShippingMethod($truck->method);
+
+        $this->assertEquals(25, $cart->getCart()->grand_total);
+
+        app(CartDatabase::class)->removeShippingMethod();
+
+        $this->assertEquals(5, $cart->getCart()->grand_total);
+    }
 }

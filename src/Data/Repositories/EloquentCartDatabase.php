@@ -149,6 +149,7 @@ class EloquentCartDatabase implements CartDatabase
         $cart->update([
             "shipping_method" => null,
         ]);
+        $this->updateTotal($cart->id);
     }
 
     public function updateTotal(int $cartId=null): void
