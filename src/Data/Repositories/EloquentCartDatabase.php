@@ -168,7 +168,7 @@ class EloquentCartDatabase implements CartDatabase
         $discount = $this->totalDiscount($total);
 
         $cart->getCart()->update([
-            "grand_total" => $total - $discount,
+            "grand_total" => $total - $discount + $cart->getDeliveryCost(),
             "tax_total" => $taxes,
             "sub_total" => $subtotal,
             "discount" => $discount

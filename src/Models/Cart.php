@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Log;
+use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Events\Cart\CartCreatedEvent;
 use juniorE\ShoppingCart\Events\Cart\CartDeletedEvent;
 use juniorE\ShoppingCart\Events\Cart\CartUpdatedEvent;

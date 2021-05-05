@@ -58,6 +58,12 @@ interface Cart
      */
     public function setCheckoutMethod(string $checkoutMethod): void;
 
+    /**
+     * Get the delivery cost
+     *
+     * @return mixed
+     */
+    public function getDeliveryCost();
 
     /**
      * Set the shippingMethod

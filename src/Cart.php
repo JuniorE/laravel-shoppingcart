@@ -94,7 +94,9 @@ class Cart extends BaseCart
 
     public function setShippingMethod(string $method): void
     {
-        app(CartDatabase::class)->setShippingMethod($method);
+        $cartDatabase = app(CartDatabase::class);
+        $cartDatabase->setShippingMethod($method);
+        $cartDatabase->updateTotal();
     }
 
     public function setAdditionalData(array $data)
@@ -125,6 +127,13 @@ class Cart extends BaseCart
 
         $this->identifier = $identifier;
         session()->put(self::SESSION_CART_IDENTIFIER, $identifier);
+    }
+
+    public function getDeliveryCost()
+    {
+        return $this->getCart()->shipping_method
+            ? $this->getShippingRate()->price
+            : 0;
     }
 
     public function getShippingRate(): CartShippingRate

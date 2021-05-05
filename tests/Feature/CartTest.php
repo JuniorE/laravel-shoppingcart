@@ -5,6 +5,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use juniorE\ShoppingCart\Cart;
 use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Enums\CouponTypes;
+use juniorE\ShoppingCart\Enums\ItemTypes;
 use juniorE\ShoppingCart\Tests\TestCase;
 use juniorE\ShoppingCart\Models as Models;
 
@@ -845,19 +846,19 @@ class CartTest extends TestCase
             "plu" => 5,
             "price" => 4.99,
             "quantity" => 1,
-            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::PLU,
+            "type" => ItemTypes::PLU,
         ]);
         $cart->addProduct([
             "plu" => 6,
             "price" => 9.99,
             "quantity" => 1,
-            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::PLU,
+            "type" => ItemTypes::PLU,
         ]);
         $cart->addProduct([
             "plu" => 7,
             "price" => 2.49,
             "quantity" => 1,
-            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::PLU,
+            "type" => ItemTypes::PLU,
         ]);
 
         $this->assertCount(3, $cart->items());
@@ -883,7 +884,7 @@ class CartTest extends TestCase
             "plu" => 7,
             "price" => 2.49,
             "quantity" => 1,
-            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::PLU,
+            "type" => ItemTypes::PLU,
         ]);
 
         $coupon = $cart->couponsRepository->addCoupon([
@@ -912,50 +913,90 @@ class CartTest extends TestCase
         $cart = cart();
         $parent = $cart->addProduct([
             "plu" => 1,
-            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::PLU
+            "type" => ItemTypes::PLU
         ]);
         $cart->addProduct([
             "plu" => 2,
             "parent_id" => $parent->id,
-            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::PLU
+            "type" => ItemTypes::PLU
         ]);
         $cart->addProduct([
             "plu" => 3,
             "parent_id" => $parent->id,
-            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::MENU
+            "type" => ItemTypes::MENU
         ]);
         $cart->addProduct([
             "plu" => 4,
             "parent_id" => $parent->id,
-            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::WARRANTY
+            "type" => ItemTypes::WARRANTY
         ]);
         $cart->addProduct([
             "plu" => 5,
             "parent_id" => $parent->id,
-            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::WARRANTY
+            "type" => ItemTypes::WARRANTY
         ]);
         $cart->addProduct([
             "plu" => 6,
             "parent_id" => $parent->id,
-            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::WARRANTY
+            "type" => ItemTypes::WARRANTY
         ]);
         $cart->addProduct([
             "plu" => 7,
             "parent_id" => $parent->id,
-            "type" => \juniorE\ShoppingCart\Enums\ItemTypes::RENT
+            "type" => ItemTypes::RENT
         ]);
 
-        $this->assertCount(1, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::PLU));
-        $this->assertEquals(2, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::PLU)->first()->plu);
+        $this->assertCount(1, $parent->getSubproductsOfType(ItemTypes::PLU));
+        $this->assertEquals(2, $parent->getSubproductsOfType(ItemTypes::PLU)->first()->plu);
 
-        $this->assertCount(1, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::MENU));
-        $this->assertEquals(3, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::MENU)->first()->plu);
+        $this->assertCount(1, $parent->getSubproductsOfType(ItemTypes::MENU));
+        $this->assertEquals(3, $parent->getSubproductsOfType(ItemTypes::MENU)->first()->plu);
 
-        $this->assertCount(3, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::WARRANTY));
-        $this->assertEquals(4, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::WARRANTY)->first()->plu);
-        $this->assertEquals(6, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::WARRANTY)->last()->plu);
+        $this->assertCount(3, $parent->getSubproductsOfType(ItemTypes::WARRANTY));
+        $this->assertEquals(4, $parent->getSubproductsOfType(ItemTypes::WARRANTY)->first()->plu);
+        $this->assertEquals(6, $parent->getSubproductsOfType(ItemTypes::WARRANTY)->last()->plu);
 
-        $this->assertCount(1, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::RENT));
-        $this->assertEquals(7, $parent->getSubproductsOfType(\juniorE\ShoppingCart\Enums\ItemTypes::RENT)->first()->plu);
+        $this->assertCount(1, $parent->getSubproductsOfType(ItemTypes::RENT));
+        $this->assertEquals(7, $parent->getSubproductsOfType(ItemTypes::RENT)->first()->plu);
+    }
+
+    /**
+     * @test
+     */
+    public function does_shipping_rate_affect_total_price(){
+        $cart = cart();
+
+        $truck = cart()->shippingRateRepository->addShippingRate([
+            "method" => "truck",
+            "price" => 20,
+            "minimum_cart_price" => 0
+        ]);
+        $truck2 = cart()->shippingRateRepository->addShippingRate([
+            "method" => "truck",
+            "price" => 10,
+            "minimum_cart_price" => 50
+        ]);
+
+        $cart->addProduct([
+            "plu" => 1,
+            "quantity" => 1,
+            "price" => 5,
+            "type" => ItemTypes::PLU
+        ]);
+
+        $cart->setShippingMethod($truck->method);
+
+        $this->assertEquals('truck', $cart->getCart()->shipping_method);
+        $this->assertEquals($truck->price, $cart->getShippingRate()->price);
+        $this->assertEquals($truck->price + 5, $cart->getCart()->grand_total);
+
+        $cart->addProduct([
+            "plu" => 2,
+            "quantity" => 1,
+            "price" => 45,
+            "type" => ItemTypes::PLU,
+        ]);
+
+        $this->assertEquals($truck2->price + 50, $cart->getCart()->grand_total);
     }
 }
