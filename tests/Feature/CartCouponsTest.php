@@ -403,4 +403,46 @@ class CartCouponsTest extends TestCase
         $this->assertEquals(0, $cart->getCart()->discount);
         $this->assertEquals(19.99, $cart->getCart()->grand_total);
     }
+
+    /**
+     * @test
+     */
+    public function does_coupon_amount_change_when_adding_and_removing_products(){
+        $cart = cart();
+
+        $coupon = $cart->couponsRepository->addCoupon([
+            "name" => "10EUR",
+            "discount_amount" => 10,
+            "coupon_type" => CouponTypes::AMOUNT,
+        ]);
+
+        $product1 = [
+            "plu" => 1,
+            "quantity" => 1,
+            "price" => 11.55,
+            "tax_percent" => 0.06,
+        ];
+
+        $product2 = [
+            "plu" => 2,
+            "quantity" => 1,
+            "price" => 5.25,
+            "tax_percent" => 0.06,
+        ];
+
+        $cart->addProduct($product1);
+        $this->assertEquals(11.55, $cart->getCart()->grand_total);
+
+        $cart->addCoupon($coupon);
+        $this->assertEquals(1.55, $cart->getCart()->grand_total);
+        $this->assertEquals(10, $cart->getCart()->discount);
+
+        $cartItem = $cart->addProduct($product2);
+        $this->assertEquals(6.80, $cart->getCart()->grand_total);
+        $this->assertEquals(10, $cart->getCart()->discount);
+
+        $cart->itemsRepository->setQuantity($cartItem, 2);
+        $this->assertEquals(12.05, $cart->getCart()->grand_total);
+        $this->assertEquals(10, $cart->getCart()->discount);
+    }
 }

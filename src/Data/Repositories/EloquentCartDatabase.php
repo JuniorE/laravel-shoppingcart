@@ -174,7 +174,7 @@ class EloquentCartDatabase implements CartDatabase
 
         $taxes = $total - $subtotal;
 
-        $discount = $this->totalDiscount($total);
+        $discount = $this->totalDiscount();
 
         $cart->getCart()->update([
             "grand_total" => $total - $discount + $cart->getDeliveryCost(),
@@ -184,7 +184,7 @@ class EloquentCartDatabase implements CartDatabase
         ]);
     }
 
-    private function totalDiscount(float $total)
+    private function totalDiscount()
     {
         $cart = cart();
         $coupon = $cart->getCart()->coupon;
@@ -200,6 +200,7 @@ class EloquentCartDatabase implements CartDatabase
                 }
                 return $carry + $item->total;
             });
+
             return $coupon->discount($total) + $itemDiscounts;
         }
         return 0 + $itemDiscounts;

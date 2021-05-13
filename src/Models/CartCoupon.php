@@ -82,7 +82,7 @@ class CartCoupon extends Model
         }
 
         return min(
-            $cart->getCart()->grand_total,
+            (float) $cart->getCart()->grand_total + (float) $cart->getCart()->discount,
             $this->discountAmount($price, $quantity, $productPrice)
         );
     }
