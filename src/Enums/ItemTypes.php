@@ -12,4 +12,5 @@ class ItemTypes
     const WARRANTY=4;
     const PACKAGES=5;
     const MENU=6;
+    const VOUCHER=7;
 }

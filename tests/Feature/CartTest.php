@@ -240,7 +240,7 @@ class CartTest extends TestCase
         ]);
 
         $this->assertNull(cart()->getCart()->shipping_method);
-        
+
         $truck = cart()->shippingRateRepository->addShippingRate([
             "method" => "truck",
             "price" => 20,
