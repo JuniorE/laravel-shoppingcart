@@ -11,7 +11,6 @@ use juniorE\ShoppingCart\Data\Interfaces\CartItemDatabase;
 use juniorE\ShoppingCart\Data\Interfaces\VisitsHistoryDatabase;
 use juniorE\ShoppingCart\Models\CartCoupon;
 use juniorE\ShoppingCart\Models\CartItem;
-use juniorE\ShoppingCart\Models\CartShippingRate;
 
 class Cart extends BaseCart
 {
@@ -136,7 +135,7 @@ class Cart extends BaseCart
             : 0;
     }
 
-    public function getShippingRate(): CartShippingRate
+    public function getShippingRate()
     {
         $rates = $this->shippingRateRepository->shippingRatesForMethod($this->getCart()->shipping_method)
             ->where("minimum_cart_price", "<=", $this->getCart()->sub_total + $this->getCart()->tax_total)

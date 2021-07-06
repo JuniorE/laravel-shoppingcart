@@ -7,7 +7,6 @@ namespace juniorE\ShoppingCart\Contracts;
 use Illuminate\Support\Collection;
 use juniorE\ShoppingCart\Models\CartCoupon;
 use juniorE\ShoppingCart\Models\CartItem;
-use juniorE\ShoppingCart\Models\CartShippingRate;
 
 interface Cart
 {
@@ -109,7 +108,7 @@ interface Cart
 
     public function updateIdentifier(string $identifier): void;
 
-    public function getShippingRate(): CartShippingRate;
+    public function getShippingRate();
 
     public function contains(array $plus): bool;
 
