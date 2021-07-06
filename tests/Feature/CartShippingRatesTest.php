@@ -127,4 +127,18 @@ class CartShippingRatesTest extends TestCase
 
         $this->assertCount(0, CartShippingRate::all());
     }
+    
+    /**
+     * @test
+     */
+    public function shipping_rate_price_does_not_count_for_shipping_rate_eligibility(){
+        $cart = cart();
+        $cart->addProduct([
+            "plu" => 1,
+            "quantity" => 1,
+            "price" => 45
+        ]);
+        $cart->setShippingMethod($this->invoice->method);
+        $this->assertEqualsWithDelta(45 + $cart->getShippingRate()->price, $cart->getCart()->grand_total, 0.5);
+    }
 }
