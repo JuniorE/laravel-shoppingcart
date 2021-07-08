@@ -3,6 +3,7 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
+use juniorE\ShoppingCart\Enums\ItemTypes;
 use juniorE\ShoppingCart\Models\CartItem;
 use juniorE\ShoppingCart\Tests\TestCase;
 
@@ -334,7 +335,7 @@ class CartItemTest extends TestCase
         $product = [
             "quantity" => 0.25,
             "plu" => 695,
-            "type" => 1,
+            "type" => ItemTypes::PLU,
             "price" => 10
         ];
 
@@ -343,25 +344,49 @@ class CartItemTest extends TestCase
         $subproduct = $cart->addProduct([
             "parent_id" => $parent->id,
             "plu" => 123,
-            "type" => 1,
+            "type" => ItemTypes::PLU,
             "quantity" => 3,
             "price" => 1
         ]);
 
-        $this->assertEquals(5.5, $cart->getCart()->grand_total);
+        $warranty = $cart->addProduct([
+            "parent_id" => $parent->id,
+            "plu" => 456,
+            "type" => ItemTypes::WARRANTY,
+            "quantity" => 1,
+            "price" => 5
+        ]);
+        $this->assertEquals(1, $warranty->quantity);
+
+        $this->assertEquals(10.5, $cart->getCart()->grand_total);
         $this->assertEquals(3, $subproduct->quantity);
+        $this->assertEquals(1, $warranty->quantity);
         $this->assertEquals(0.25, $parent->quantity);
 
         $cart->itemsRepository->setQuantity($parent, 1, true);
         $subproduct->refresh();
+        $warranty->refresh();
         $this->assertEquals(12, $subproduct->quantity);
         $this->assertEquals(1, $parent->quantity);
-        $this->assertEquals(22, $cart->getCart()->grand_total);
+        $this->assertEquals(4, $warranty->quantity);
+        $this->assertEquals(42, $cart->getCart()->grand_total);
 
         $cart->itemsRepository->setQuantity($parent, 0.25, false);
         $subproduct->refresh();
+        $warranty->refresh();
         $this->assertEquals(12, $subproduct->quantity);
         $this->assertEquals(0.25, $parent->quantity);
-        $this->assertEquals(14.5, $cart->getCart()->grand_total);
+        $this->assertEquals(4, $warranty->quantity);
+        $this->assertEquals(34.5, $cart->getCart()->grand_total);
+
+        $cart->itemsRepository->setQuantity($parent, 1, function(CartItem $product) {
+            return $product->type === ItemTypes::WARRANTY;
+        });
+        $subproduct->refresh();
+        $warranty->refresh();
+        $this->assertEquals(12, $subproduct->quantity);
+        $this->assertEquals(1, $parent->quantity);
+        $this->assertEquals(16, $warranty->quantity);
+        $this->assertEquals(102, $cart->getCart()->grand_total);
     }
 }

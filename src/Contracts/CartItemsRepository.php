@@ -4,6 +4,7 @@
 namespace juniorE\ShoppingCart\Contracts;
 
 
+use Closure;
 use juniorE\ShoppingCart\Models\CartItem;
 
 interface CartItemsRepository
@@ -11,9 +12,9 @@ interface CartItemsRepository
     /**
      * @param CartItem $item
      * @param float $quantity
-     * @param bool $updateSubproducts
+     * @param bool|Closure $updateSubproducts
      */
-    public function setQuantity(CartItem $item, float $quantity, bool $updateSubproducts=false): void;
+    public function setQuantity(CartItem $item, float $quantity, $updateSubproducts=false): void;
 
     /**
      * @param CartItem $item

@@ -4,6 +4,7 @@
 namespace juniorE\ShoppingCart\Data\Repositories;
 
 
+use Closure;
 use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Data\Interfaces\CartItemDatabase;
 use juniorE\ShoppingCart\Models\CartItem;
@@ -18,18 +19,17 @@ class EloquentCartItemDatabase implements CartItemDatabase
         app(CartDatabase::class)->updateTotal($id);
     }
 
-    public function setQuantity(CartItem $item, float $quantity, bool $updateSubproducts=false): void
+    public function setQuantity(CartItem $item, float $quantity, $updateSubproducts=false): void
     {
         $old = $item->quantity;
         $item->update([
             'quantity' => $quantity
         ]);
 
-        if ($updateSubproducts) {
-            $item->subproducts->map(function(CartItem $subproduct) use ($quantity, $old) {
-                $subproduct->quantity = $subproduct->quantity * ($quantity / $old);
-                $subproduct->save();
-            });
+        if ($updateSubproducts instanceof Closure) {
+            $this->updateSubproducts($item, $quantity / $old, $updateSubproducts);
+        } elseif ($updateSubproducts) {
+            $this->updateSubproducts($item, $quantity / $old);
         }
     }
 
@@ -103,5 +103,16 @@ class EloquentCartItemDatabase implements CartItemDatabase
         ]);
 
         app(CartDatabase::class)->updateTotal();
+    }
+
+    private function updateSubproducts(CartItem $item, float $multiplier, Closure $shouldUpdate=null)
+    {
+        $item->subproducts->map(function(CartItem $subproduct) use ($multiplier, $shouldUpdate) {
+            if (($shouldUpdate && $shouldUpdate($subproduct))
+                || $shouldUpdate === null) {
+                $subproduct->quantity = $subproduct->quantity * $multiplier;
+            }
+            $subproduct->save();
+        });
     }
 }

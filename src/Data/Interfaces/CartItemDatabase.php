@@ -4,6 +4,7 @@
 namespace juniorE\ShoppingCart\Data\Interfaces;
 
 
+use Closure;
 use juniorE\ShoppingCart\Models\CartItem;
 
 interface CartItemDatabase
@@ -13,9 +14,9 @@ interface CartItemDatabase
     /**
      * @param CartItem $item
      * @param float $quantity
-     * @param bool $updateSubproducts
+     * @param bool|Closure $updateSubproducts
      */
-    public function setQuantity(CartItem $item, float $quantity, bool $updateSubproducts=false): void;
+    public function setQuantity(CartItem $item, float $quantity, $updateSubproducts=false): void;
 
     /**
      * @param CartItem $item

@@ -10,7 +10,7 @@ use juniorE\ShoppingCart\Models\CartItem;
 
 class CartItemsRepository implements Contracts\CartItemsRepository
 {
-    public function setQuantity(CartItem $item, float $quantity, bool $updateSubproducts=false): void {
+    public function setQuantity(CartItem $item, float $quantity, $updateSubproducts=false): void {
         $this->getDatabase()->setQuantity($item, $quantity, $updateSubproducts);
     }
 

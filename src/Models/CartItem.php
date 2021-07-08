@@ -43,6 +43,7 @@ class CartItem extends Model
         "price" => "float",
         "cart_id" => "int",
         "plu" => "int",
+        "type" => "int",
         "additional" => "array",
         "updated_at" => "datetime",
         "created_at" => "datetime",
