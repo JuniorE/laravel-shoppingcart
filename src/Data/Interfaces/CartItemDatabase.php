@@ -12,9 +12,10 @@ interface CartItemDatabase
 
     /**
      * @param CartItem $item
-     * @param int $quantity
+     * @param float $quantity
+     * @param bool $updateSubproducts
      */
-    public function setQuantity(CartItem $item, int $quantity): void;
+    public function setQuantity(CartItem $item, float $quantity, bool $updateSubproducts=false): void;
 
     /**
      * @param CartItem $item

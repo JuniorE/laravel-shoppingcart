@@ -5,14 +5,13 @@ namespace juniorE\ShoppingCart;
 
 
 use juniorE\ShoppingCart\Data\Interfaces\CartCouponDatabase;
-use juniorE\ShoppingCart\Data\Interfaces\CartDatabase;
 use juniorE\ShoppingCart\Data\Interfaces\CartItemDatabase;
 use juniorE\ShoppingCart\Models\CartItem;
 
 class CartItemsRepository implements Contracts\CartItemsRepository
 {
-    public function setQuantity(CartItem $item, int $quantity): void {
-        $this->getDatabase()->setQuantity($item, $quantity);
+    public function setQuantity(CartItem $item, float $quantity, bool $updateSubproducts=false): void {
+        $this->getDatabase()->setQuantity($item, $quantity, $updateSubproducts);
     }
 
     public function setParentCartItem(CartItem $item, int $parentId): void

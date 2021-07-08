@@ -324,4 +324,44 @@ class CartItemTest extends TestCase
         $cart->addProduct($product);
         $this->assertEquals((float) 0.25, $cart->items()->first()->quantity);
     }
+
+    /**
+     * @test
+     */
+    public function can_update_subproduct_quantities(){
+        $cart = cart();
+
+        $product = [
+            "quantity" => 0.25,
+            "plu" => 695,
+            "type" => 1,
+            "price" => 10
+        ];
+
+        $parent = $cart->addProduct($product);
+
+        $subproduct = $cart->addProduct([
+            "parent_id" => $parent->id,
+            "plu" => 123,
+            "type" => 1,
+            "quantity" => 3,
+            "price" => 1
+        ]);
+
+        $this->assertEquals(5.5, $cart->getCart()->grand_total);
+        $this->assertEquals(3, $subproduct->quantity);
+        $this->assertEquals(0.25, $parent->quantity);
+
+        $cart->itemsRepository->setQuantity($parent, 1, true);
+        $subproduct->refresh();
+        $this->assertEquals(12, $subproduct->quantity);
+        $this->assertEquals(1, $parent->quantity);
+        $this->assertEquals(22, $cart->getCart()->grand_total);
+
+        $cart->itemsRepository->setQuantity($parent, 0.25, false);
+        $subproduct->refresh();
+        $this->assertEquals(12, $subproduct->quantity);
+        $this->assertEquals(0.25, $parent->quantity);
+        $this->assertEquals(14.5, $cart->getCart()->grand_total);
+    }
 }

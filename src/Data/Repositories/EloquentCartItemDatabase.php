@@ -18,11 +18,19 @@ class EloquentCartItemDatabase implements CartItemDatabase
         app(CartDatabase::class)->updateTotal($id);
     }
 
-    public function setQuantity(CartItem $item, int $quantity): void
+    public function setQuantity(CartItem $item, float $quantity, bool $updateSubproducts=false): void
     {
+        $old = $item->quantity;
         $item->update([
             'quantity' => $quantity
         ]);
+
+        if ($updateSubproducts) {
+            $item->subproducts->map(function(CartItem $subproduct) use ($quantity, $old) {
+                $subproduct->quantity = $subproduct->quantity * ($quantity / $old);
+                $subproduct->save();
+            });
+        }
     }
 
     public function setParentCartItem(CartItem $item, int $parentId): void
