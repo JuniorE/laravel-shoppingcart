@@ -1069,9 +1069,6 @@ class CartTest extends TestCase
         $this->assertCount(1, cart("logged_in")->items());
 
         // Logout
-        /**
-         * @var Cart $loggedOut
-         */
         $loggedOut = cart("logged_out_2");
         $this->assertCount(0, $loggedOut->items());
 
@@ -1097,6 +1094,8 @@ class CartTest extends TestCase
         $this->assertCount(2, $loggedOut->items());
 
         // Log back in
+        // Fetch cart from database again
+        $cart = cart("logged_in");
         $finalCart = $cart->merge($loggedOut);
 
         $this->assertCount(3, $finalCart->items());

@@ -204,7 +204,7 @@
 
         public function merge(\juniorE\ShoppingCart\Contracts\Cart $other): \juniorE\ShoppingCart\Contracts\Cart
         {
-            $other->getItems()->each(function ($item) {
+            $other->items()->each(function ($item) {
                 $this->addItem($item);
             });
 
