@@ -191,6 +191,7 @@ class CartTest extends TestCase
     public function can_update_identifier(){
         $customerId = 10;
         $identifier = md5($customerId);
+
         cart()->addProduct([
             "plu" => 5
         ]);

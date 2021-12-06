@@ -113,4 +113,6 @@ interface Cart
     public function contains(array $plus): bool;
 
     public function itemsTree(): Collection;
+
+    public function merge(Cart $other): Cart;
 }
