@@ -1098,6 +1098,7 @@ class CartTest extends TestCase
         $cart = cart("logged_in");
         $finalCart = $cart->merge($loggedOut);
 
+        $this->assertEquals(1, $finalCart->itemsTree()[1]->quantity);
         $this->assertCount(3, $finalCart->items());
     }
 }

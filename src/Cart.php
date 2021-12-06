@@ -199,12 +199,12 @@
          */
         public function itemsTree(): Collection
         {
-            return app(CartDatabase::class)->getCartItemsTree();
+            return app(CartDatabase::class)->getCartItemsTree($this->id);
         }
 
         public function merge(\juniorE\ShoppingCart\Contracts\Cart $other): \juniorE\ShoppingCart\Contracts\Cart
         {
-            $other->items()->each(function ($item) {
+            $other->itemsTree()->each(function ($item) {
                 $this->addItem($item);
             });
 
