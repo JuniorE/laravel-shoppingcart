@@ -1041,4 +1041,64 @@ class CartTest extends TestCase
 
         $this->assertEquals(5, $cart->getCart()->grand_total);
     }
+
+
+    /**
+     * @test
+     */
+    public function can_add_subproducts_after_logging_in_and_out()
+    {
+        /**
+         * @var Cart $cart
+         */
+        $cart = cart();
+
+        // add product
+        $sushi = [
+            "plu" => 1,
+            "quantity" => 1,
+            "price" => 4.95,
+            "type" => ItemTypes::PLU
+        ];
+
+        $cart->addProduct($sushi);
+
+        // Login
+        $cart->updateIdentifier("logged_in");
+
+        $this->assertCount(1, cart("logged_in")->items());
+
+        // Logout
+        /**
+         * @var Cart $loggedOut
+         */
+        $loggedOut = cart("logged_out_2");
+        $this->assertCount(0, $loggedOut->items());
+
+        // add product with subproducts
+        $overpriced_sauce = [
+            "plu" => 2,
+            "quantity" => 1,
+            "price" => 999.99,
+            "type" => ItemTypes::PLU
+        ];
+
+        $bottle = $loggedOut->addProduct($overpriced_sauce);
+
+        $louis_vuitton_bottle = [
+            "plu"      => 3,
+            "quantity" => 1,
+            "price"    => 9999.99,
+            "type"     => ItemTypes::WARRANTY,
+            "parent_id" => $bottle->id
+        ];
+        $loggedOut->addProduct($louis_vuitton_bottle);
+
+        $this->assertCount(2, $loggedOut->items());
+
+        // Log back in
+        $finalCart = $cart->merge($loggedOut);
+
+        $this->assertCount(3, $finalCart->items());
+    }
 }

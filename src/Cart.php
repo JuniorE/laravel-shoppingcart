@@ -219,7 +219,10 @@
                     "parent_id" => $parent ?? $product->parent_id,
                     "additional" => $product->additional ?? [],
                 ])
-                    ->merge($product->getAttributes())
+                    ->merge(
+                        collect($product->getAttributes())
+                            ->except(["id"])
+                    )
                     ->toArray());
 
             $product->subproducts->each(function ($item) use ($newParent) {
