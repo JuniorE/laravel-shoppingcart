@@ -221,7 +221,7 @@
                 ])
                     ->merge(
                         collect($product->getAttributes())
-                            ->except(["id"])
+                            ->except(["id", "additional", "parent_id"])
                     )
                     ->toArray());
 
