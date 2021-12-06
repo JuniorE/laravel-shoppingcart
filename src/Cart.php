@@ -216,7 +216,8 @@
             // add this product (insert parent id if exists)
             $newParent = $this->addProduct(
                 collect([
-                    "parent_id" => $parent ?? $product->parent_id
+                    "parent_id" => $parent ?? $product->parent_id,
+                    "additional" => $product->additional ?? [],
                 ])
                     ->merge($product->getAttributes())
                     ->toArray());
