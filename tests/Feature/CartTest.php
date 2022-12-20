@@ -415,7 +415,7 @@ class CartTest extends TestCase
 
         cart()->addProduct($cookie);
 
-        $this->assertEquals($frappucino["price"] + $cookie["price"], cart()->getCart()->grand_total);
+        $this->assertEquals(round($frappucino["price"] + $cookie["price"], 4), cart()->getCart()->grand_total);
 
         cart()->addCoupon($freeCookies);
 

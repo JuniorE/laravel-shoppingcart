@@ -177,10 +177,10 @@ class EloquentCartDatabase implements CartDatabase
         $discount = $this->totalDiscount();
 
         $cart->getCart()->update([
-            "grand_total" => $total - $discount + $cart->getDeliveryCost(),
+            "grand_total" => $total - round($discount, 2) + $cart->getDeliveryCost(),
             "tax_total" => $taxes,
             "sub_total" => $subtotal,
-            "discount" => $discount
+            "discount" => round($discount, 2)
         ]);
     }
 
