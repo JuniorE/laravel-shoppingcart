@@ -48,7 +48,7 @@ class ExemptionTest extends TestCase
 
         $cart->addCoupon($coupon10PERCENT);
 
-        $this->assertEquals(5.4670, $cart->getCart()->discount);
+        $this->assertEquals(5.47, $cart->getCart()->discount);
     }
 
     /**

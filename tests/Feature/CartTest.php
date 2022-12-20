@@ -904,7 +904,7 @@ class CartTest extends TestCase
         $cart->addCoupon($coupon);
 
         $this->assertCount(1, $cart->items());
-        $this->assertEquals(0.249, $cart->getCart()->discount);
+        $this->assertEquals(0.25, $cart->getCart()->discount);
 
         $cart->empty();
 
